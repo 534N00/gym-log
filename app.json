@@ -9,11 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/images/icons/ios-light.png",
+        "dark": "./assets/images/icons/ios-dark.png",
+        "tinted": "./assets/images/icons/ios-tinted.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icons/adaptive-icon.png",
+        "monochromeImage": "./assets/images/icons/adaptive-icon.png",
+        "backgroundImage": "./assets/images/layered-waves-haikei-light.svg",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
@@ -28,10 +35,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icons/adaptive-icon.png",
           "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "resizeMode": "fit",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/images/icons/adaptive-icon.png",
+            "backgroundColor": "#000000"
+          }
         }
       ]
     ],
