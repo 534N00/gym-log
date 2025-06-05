@@ -20,7 +20,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icons/adaptive-icon.png",
         "monochromeImage": "./assets/images/icons/adaptive-icon.png",
-        "backgroundImage": "./assets/images/layered-waves-haikei-light.svg",
+        "backgroundImage": "./assets/images/svgs/layered-waves-haikei-light.svg",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true

@@ -7,9 +7,10 @@ import "@/global.css"; // Import NativeWind
 
 
 export default function RootLayout() {
-  return (
-    <SafeAreaProvider>
-      <StatusBar style="auto" />
+  return (    
+    <SafeAreaProvider // calculates safe area for SafeAreaViews      
+    >
+      <StatusBar style="auto"/>
       <Tabs screenOptions={{
         tabBarActiveTintColor: "green"
       }}>
@@ -25,13 +26,14 @@ export default function RootLayout() {
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="history" color={color} size={size} />
         }} />
         <Tabs.Screen name="new_workout" options={{
-          title: "New Workout",
-          tabBarLabel: ({ focused }) => focused ? <Text>New Workout</Text> : <Text></Text>,
+          title: "New",
+          headerShown: false,
+          tabBarLabel: ({ focused }) => focused ? <Text>New</Text> : <Text></Text>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="weight-lifter" color={color} size={size} />
         }} />
         <Tabs.Screen name="add_movements" options={{
-          title: "Add Movements",
-          tabBarLabel: ({ focused }) => focused ? <Text>Add Movements</Text> : <Text></Text>,
+          title: "Movements",
+          tabBarLabel: ({ focused }) => focused ? <Text>Movements</Text> : <Text></Text>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="run" color={color} size={size} />
         }} />
         <Tabs.Screen name="app_settings" options={{
