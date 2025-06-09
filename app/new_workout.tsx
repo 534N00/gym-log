@@ -28,7 +28,7 @@ const NewWorkout = () => {
           <View // Header block
             className="flex-row items-center justify-between mb-6 -ml-2 -mr-2"
           >
-            <Ionicons name="chevron-back" size={35} color="black" />
+            <Ionicons className="-ml-1" name="chevron-back" size={35} color="black" />
             <DateBox date={date} onChange={(e, selectedDate) => {if (selectedDate) { setDate(selectedDate); }}} />
             <View // Tag color and delete buttons
               className="flex-row items-center space-x-4"
@@ -37,10 +37,9 @@ const NewWorkout = () => {
                 <MaterialIcons name="circle" size={35} color={"black"} />
               </Pressable>
               <Pressable onPress={() => console.log('delete')}>
-                <Ionicons name="trash-outline" color={"black"} size={45} />
+                <Ionicons name="trash-outline" color={"black"} size={35} />
               </Pressable>
             </View>
-            
           </View>
           
           <Text>Component for new exercise</Text>

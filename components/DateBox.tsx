@@ -6,15 +6,17 @@ const DateBox = ({ date, onChange }: {
   date: Date;
   onChange: (event: any, selectedDate?: Date) => void;
 }) => {
+  // State to control the visibility of the DateTimePicker
   const [showPicker, setShowPicker] = useState(false);
 
   return (
     <>
       <Pressable 
+        className="rounded-2xl p-4 bg-zinc-50 w-[68%]"
         onPress={() => setShowPicker(true)}
-        className="bg-zinc-100 px-4 py-2 rounded-xl"
+        
       >
-        <Text className="text-2xl font-bold">
+        <Text className="text-3xl font-bold text-center">
           {date.toLocaleDateString(undefined, {
             year: 'numeric',
             month: 'long',

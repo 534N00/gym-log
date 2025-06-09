@@ -1,18 +1,32 @@
-import { Tabs } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Text } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import "@/global.css"; // Import NativeWind 
+import "@/global.css"; // Import NativeWind styles
+import { initDatabase } from "@/utils/database"; // Import database initialization
+import { useEffect } from "react";
 
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Tabs } from "expo-router";
+import { Text } from "react-native";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function RootLayout() {
+  useEffect(() => {
+    // Initialize the database when the app starts
+    initDatabase();
+    console.log("Database initialized");
+  }, []);
+
   return (    
     <SafeAreaProvider // calculates safe area for SafeAreaViews      
     >
       <StatusBar style="auto"/>
       <Tabs screenOptions={{
-        tabBarActiveTintColor: "green"
+        tabBarActiveTintColor: "green",
+        tabBarStyle: {
+          // backgroundColor: "white",
+          borderTopLeftRadius:15,
+          borderTopRightRadius:15,
+          // height: 60
+        }
       }}>
         <Tabs.Screen name="index" options={{
           title: "Home",

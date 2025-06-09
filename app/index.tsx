@@ -29,12 +29,12 @@ export default function Index() {
           <View // bubbles
             className="h-[100] flex-row items-center justify-between mb-6"
           > 
-            <View className="w-[55%] h-full rounded-[20] p-4 bg-green-50 items-center">
+            <View className="w-[55%] h-full rounded-3xl p-4 bg-zinc-50 items-center">
               <Text className="text-3xl font-extrabold mt-2 mb-2">9</Text>
               <Text className="text-lg">days since last workout</Text>
             </View>
             <Pressable onPress={() => router.push('/new_workout')}
-              className="w-[40%] h-full rounded-[20] p-4 bg-green-50 items-center"
+              className="w-[40%] h-full rounded-3xl p-4 bg-zinc-50 items-center"
             >
               <MaterialCommunityIcons name="heart-plus" color={"darkred"} size={45} />
               <Text className="text-lg mt-1">New Workout</Text>
