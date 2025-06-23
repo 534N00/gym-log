@@ -12,7 +12,7 @@ export default function RootLayout() {
   useEffect(() => {
     // Initialize the database when the app starts
     initDatabase();
-    console.log("Database initialized");
+    // console.log("Database initialized");
   }, []);
 
   return (    

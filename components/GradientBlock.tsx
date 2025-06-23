@@ -8,13 +8,7 @@ const GradientBlock = () => {
 
   const colorScheme = useColorScheme();
   // Colors for light and dark mode
-  const colors = {
-    light: ['lightblue', '#f5f5f5'] as [string, string],
-    dark: ['#1e90ff', '#000080'] as [string, string] // Example colors for dark mode
-  };
-  const gradient = colors.light;
-  // const gradient = colorScheme === 'dark' ? colors.dark : colors.light;
-
+  
   return (
     <>
       <View style={{ 
@@ -23,10 +17,10 @@ const GradientBlock = () => {
         left: 0,
         right: 0,
         height: blockHeight,
-        backgroundColor: gradient[0]
+        backgroundColor: "#E6CBDF"
       }}/>
       <LinearGradient
-        colors={gradient}
+        colors={["#E6CBDF", "#B587A8"]}
         style={{
           position: 'absolute',
           top: blockHeight - 50, // Overlap with solid block

@@ -30,7 +30,6 @@ export const initDatabase = () => {
                 pos INTEGER, -- ordering
                 resistance REAL,
                 reps REAL,
-                is_lbs INTEGER, -- bool for unit type
                 is_drop INTEGER, -- bool for dropsets
                 has_partials INTEGER, -- bool for partial reps done
                 is_uni INTEGER, -- bool for unilateral movement
@@ -62,7 +61,6 @@ export interface ExerciseData {
 export interface SetData {
     resistance?: number;
     reps: number;
-    is_lbs: number;
     is_drop?: number;
     has_partials?: number;
     is_uni?: number;
@@ -88,7 +86,6 @@ export interface SetFromDB {
     pos: number;
     resistance: number | null;
     reps: number;
-    is_lbs: number;
     is_drop: number;
     has_partials: number;
     is_uni: number;
@@ -155,8 +152,8 @@ export const insertWorkout = (workoutData: WorkoutData): number => {
             const sets = exercises[i].sets;
             for (let j=0; j<sets.length; j++) {
                 const setResult = db.runSync(
-                    'INSERT INTO sets (date, exercise_pos, pos, resistance, reps, is_lbs, is_drop, has_partials, is_uni) VALUES (?,?,?,?,?,?,?,?,?)',
-                    [date_id, i+1, j+1, sets[j].resistance || null, sets[j].reps, sets[j].is_lbs, sets[j].is_drop || 0, sets[j].has_partials || 0, sets[j].is_uni || 0]
+                    'INSERT INTO sets (date, exercise_pos, pos, resistance, reps, is_lbs, is_drop, has_partials, is_uni) VALUES (?,?,?,?,?,?,?,?)',
+                    [date_id, i+1, j+1, sets[j].resistance || null, sets[j].reps, sets[j].is_drop || 0, sets[j].has_partials || 0, sets[j].is_uni || 0]
                 );
             }
         }
