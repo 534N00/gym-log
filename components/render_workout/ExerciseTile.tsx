@@ -1,8 +1,8 @@
-import { View, Text, Pressable } from 'react-native';
-import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore'
 import AutocompleteSelect from '@/components/AutocompleteSelect';
+import SetControls from '@/components/render_workout/SetControls';
+import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore';
 import Feather from '@expo/vector-icons/Feather';
-import SetControls from '@/components/SetControls';
+import { Pressable, Text, View } from 'react-native';
 
 interface ExerciseTileProps {
   eIndex: number; // Index of the exercise in the workout Exercise 0, 1, etc.

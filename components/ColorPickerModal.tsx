@@ -16,8 +16,8 @@ interface ColorPickerModalProps {
     setSelected: (color: string) => void;
 }
 
-const ColorPickerModal: React.FC<ColorPickerModalProps> = (props) => {
-    const { visible, setVisibility, setSelected } = props;
+const ColorPickerModal: React.FC<ColorPickerModalProps> = ({visible, setVisibility, setSelected}) => {
+    
     return (
         <Modal
             animationType="slide"
@@ -32,7 +32,7 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = (props) => {
                 <Pressable
                     onPress={e => e.stopPropagation()}
                 >
-                    <View className="bg-white rounded-lg p-4 h-60 w-25 flex-row flex-wrap">
+                    <View className="bg-[#C5EBC3] rounded-lg p-4 h-[110px] w-[155px] flex-row flex-wrap">
                         {COLORS.map((color: string) => (
                             <Pressable
                                 className="p-1"

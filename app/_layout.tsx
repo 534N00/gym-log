@@ -8,6 +8,8 @@ import { Tabs } from "expo-router";
 import { Text } from "react-native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import GradientBlock from "@/components/GradientBlock";
+
 export default function RootLayout() {
   useEffect(() => {
     // Initialize the database when the app starts
@@ -36,6 +38,7 @@ export default function RootLayout() {
         }} />
         <Tabs.Screen name="workout_history" options={{
           title: "History",
+          headerShown: false,
           tabBarLabel: ({ focused }) => focused ? <Text>History</Text> : <Text></Text>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="history" color={color} size={size} />
         }} />

@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import GradientBlock from "@/components/GradientBlock";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import { resetDatabase } from "@/utils/database"; 
+
 export default function Index() {
   const router = useRouter();
   
@@ -48,6 +50,10 @@ export default function Index() {
           <View>
             <Text>Recent Workouts</Text>
           </View>
+
+          <Pressable className="p-4 bg-white rounded-2xl m-2" onPress={resetDatabase}>
+            <Text>Temp reset db button</Text>
+          </Pressable>
         </ScrollView>
       </SafeAreaView>
     </View>
