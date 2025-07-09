@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const DateBox = ({ date, onChange }: {
+interface DateBoxProps {
   date: Date;
   onChange: (event: any, selectedDate?: Date) => void;
-}) => {
+};
+
+const DateBox: React.FC<DateBoxProps> = ({ date, onChange }) => {
   // State to control the visibility of the DateTimePicker
   const [showPicker, setShowPicker] = useState(false);
 
   return (
     <>
       <Pressable 
-        className="rounded-2xl p-4 bg-zinc-50 w-[68%]"
+        className="rounded-2xl p-4 bg-zinc-50 w-80"
         onPress={() => setShowPicker(true)}
         
       >

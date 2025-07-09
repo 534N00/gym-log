@@ -2,18 +2,17 @@ import ColorPickerModal from '@/components/ColorPickerModal';
 import GradientBlock from '@/components/GradientBlock';
 import DateBox from '@/components/render_workout/DateBox';
 import ExerciseTile from '@/components/render_workout/ExerciseTile';
+import NoteBlock from '@/components/render_workout/NoteBlock';
 import { insertWorkout } from '@/utils/database';
 import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore';
+import { useOptionsStore } from '@/utils/optionsStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useNavigation } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const NewWorkout = () => {
-  const navigation = useNavigation();
-
   const date = useCurrentWorkoutStore((state) => state.date);
   const setDate = useCurrentWorkoutStore((state) => state.setDate);
   const tagColor = useCurrentWorkoutStore((state) => state.tagColor);
@@ -26,6 +25,8 @@ const NewWorkout = () => {
 
   const resetWorkout = useCurrentWorkoutStore((state) => state.resetWorkout);
   const addExercise = useCurrentWorkoutStore((state) => state.addExercise);
+
+  const triggerRefresh = useOptionsStore((s) => s.triggerRefresh);
   
   const [colorModalVisible, setColorModalVisible] = useState(false);
 
@@ -33,16 +34,16 @@ const NewWorkout = () => {
     const exercisesArr = exerciseOrder.map((id) =>  {
       const ex = exercises[id];
       return {
-        name: ex.name,
+        name: ex.name || 'N/A',
         variant: ex.variant,
         sets: ex.setOrder.map(setId => {
           const set = ex.sets[setId];
           return {
-            resistance: set.resistance,
-            reps: set.reps,
-            is_drop: set.is_drop,
-            has_partials: set.has_partials,
-            is_uni: set.is_uni,
+            resistance: set.resistance || 0,
+            reps: set.reps || 0,
+            is_drop: set.is_drop || 0,
+            has_partials: set.has_partials || 0,
+            is_uni: set.is_uni || 0,
           };
         }),
       };
@@ -55,10 +56,11 @@ const NewWorkout = () => {
     try {
       console.log(insertWorkout(workoutData));
       resetWorkout();
+      triggerRefresh(); // get past workouts callendar to refresh
     } catch (error) {
       console.error("Failed to insert workout:", error);
     }
-  }, [date, exerciseOrder, exercises, notes, resetWorkout, tagColor]);
+  }, [date, exerciseOrder, exercises, notes, resetWorkout, tagColor, triggerRefresh]);
 
   return (
     <View
@@ -122,17 +124,7 @@ const NewWorkout = () => {
             >
               <Text>Add Exercise</Text>
             </Pressable>
-            <Text className="-mb-4 ml-3 z-10 w-[75px] h-[35px] rounded-xl bg-white shaddow text-center align-middle self-start">Notes</Text>
-            <TextInput // Notes
-              className="w-[370px] h-36 p-4 m-2 rounded-xl bg-gray-200 shadow"
-              placeholder="Add notes here..."
-              multiline={true}
-              numberOfLines={6}
-              value={notes}
-              onChangeText={(note: string) => setCurrentNotes(note)}
-              textAlignVertical='top'
-              scrollEnabled={true}
-            />
+            <NoteBlock value={notes} setter={setCurrentNotes} />
             <Pressable // Finish workout
               className="p-4 m-2 rounded-full bg-[#C5EBC3] w-56 items-center"
               onPress={handleSubmit}

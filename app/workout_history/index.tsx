@@ -1,12 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { useState, useEffect, useMemo } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
 import GradientBlock from '@/components/GradientBlock';
 import WorkoutPreview from '@/components/WorkoutPreview';
 import { getRecentWorkoutPreviews, getWorkoutPreviewsByDate, unixToDate, WorkoutFromDB } from '@/utils/database';
+import { useOptionsStore } from '@/utils/optionsStore'; // for refresh tag
 
 const WorkoutHistory = () => {
+  // Refresh tag for callendar when new submit
+  const refresh = useOptionsStore((state) => state.refresh);
+
   // Stores workout previews for given date to then render into WorkoutPreview components
   const [workoutPreviews, setWorkoutPreviews] = useState<WorkoutFromDB[]>([]);
   const [markedDates, setMarkedDates] = useState<Record<string, object>>({}); // also is cache for all needed calendar info
@@ -34,11 +38,8 @@ const WorkoutHistory = () => {
     }, {} as Record<string, { dots: any[] }>);
     console.log(newMarked);
     setMarkedDates(newMarked);
-  }, []);
+  }, [refresh]);
 
-  useEffect(() => {
-    console.log(markedDates);
-  }, [markedDates]);
 
   // For behavior of user tapping on day and then seeing the previews for that day
   const handleDayPress = (day: { dateString: string }) => {

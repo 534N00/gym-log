@@ -3,16 +3,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 interface CheckboxProps {
     label: string;
+    editable?: boolean;
     onCheck: (check: boolean) => void;
     checked: boolean;
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onCheck }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, checked, editable=true, onCheck }) => {
     return (
         <View className="ml-2 mr-2 flex-row items-center gap-x-2">
             <Text className="text-white">{label}</Text>
             <Pressable
                 className="p-3 rounded-md bg-white shadow-md justify-center items-center"
+                disabled={!editable}
                 onPress={() => {
                     onCheck(!checked)
                 }}

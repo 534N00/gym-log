@@ -1,3 +1,5 @@
+// TODO: Fix naming of stuff form current to new, matching the file name
+
 import { create } from 'zustand';
 import 'react-native-get-random-values'; // Gives crypto functionality that nanoid is expecting
 import { nanoid } from 'nanoid';
@@ -76,6 +78,7 @@ const setInitialState = () => {
 export const useCurrentWorkoutStore = create<WorkoutState>((set, get) => {  
   return {
     ...setInitialState(),
+    refresh: false,
     setDate: (date) => set({ date }),
     setCurrentNotes: (notes) => set({ notes }),
     setCurrentTagColor: (tagColor) => set({ tagColor }),

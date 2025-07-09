@@ -7,8 +7,6 @@ interface AutocompleteSelectProps {
     optionType: string; // 'exercises' or 'variants'
     setter: Function; // Function to set the selected option
     placeholder?: string; // Placeholder text for the input
-    exerciseId: string; // Optional, but needed for loading with past data
-    isPast?: boolean; // Optional, for determining if we need to fetch past data
 }
 
 // Why do I have query state rather then directly update the store?
@@ -18,26 +16,10 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({
     optionType, 
     setter, 
     placeholder = "",
-    exerciseId,
-    isPast = false 
 }) => {
 
     const [query, setQuery] = useState(''); // text input
     const [showDropdown, setShowDropdown] = useState(false); // dropdown bool
-
-    // Populate text field with past data if exerciseId is provided
-    useEffect(() => {
-        if (isPast) {
-            const thisExercise = useCurrentWorkoutStore.getState().exercises[exerciseId];
-            if (thisExercise) {
-                if (optionType === 'exercises') {
-                    setQuery(thisExercise.name);
-                } else if (optionType === 'variants') {
-                    setQuery(thisExercise.variant);
-                }
-            }
-        }
-    }, [isPast, exerciseId, optionType, setQuery]);
 
     const exerciseOptions = useOptionsStore((state) => state.exerciseOptions);
     const variantOptions = useOptionsStore((state) => state.variantOptions);
