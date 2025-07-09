@@ -90,29 +90,6 @@ const WorkoutHistory = () => {
             <WorkoutPreview key={preview.date} workoutId={preview.date} readable_date={unixToDate(preview.date).toDateString()} color={preview.tag_color} />
           ))}
         </View>
-        
-        {/* <Pressable // Test get from db
-          className="p-4 rounded-3xl bg-white w-20" 
-          onPress={
-            () => {
-              try {
-                const previews = getRecentWorkoutPreviews(3);
-                console.log(previews);
-
-                // const workout = getCompleteWorkout(previews[0].date);
-                // console.log(workout);
-                // console.log(workout?.exercises[0].sets);
-                // const benchExercises = getRecentSameExercise('Benchpress', 4, 'Barbell');
-                // console.log(benchExercises);
-                // console.log(benchExercises[0].sets);
-
-
-              } catch (e) {
-                console.error(e);
-              }
-            }
-          }
-        ><Text>Get</Text></Pressable> */}
       </SafeAreaView>
     </View>
   );

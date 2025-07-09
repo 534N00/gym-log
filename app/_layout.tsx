@@ -33,29 +33,30 @@ export default function RootLayout() {
         <Tabs.Screen name="index" options={{
           title: "Home",
           headerShown: false,
-          tabBarLabel: ({ focused }) => focused ? <Text>Home</Text> : <Text></Text>,
+          tabBarLabel: ({ focused }) => focused ? <Text>Home</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="home" color={color} size={size} />
         }} />
         <Tabs.Screen name="workout_history" options={{
           title: "History",
           headerShown: false,
-          tabBarLabel: ({ focused }) => focused ? <Text>History</Text> : <Text></Text>,
+          tabBarLabel: ({ focused }) => focused ? <Text>History</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="history" color={color} size={size} />
         }} />
         <Tabs.Screen name="new_workout" options={{
           title: "New",
           headerShown: false,
-          tabBarLabel: ({ focused }) => focused ? <Text>New</Text> : <Text></Text>,
+          tabBarLabel: ({ focused }) => focused ? <Text>New</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="weight-lifter" color={color} size={size} />
         }} />
         <Tabs.Screen name="add_movements" options={{
           title: "Movements",
-          tabBarLabel: ({ focused }) => focused ? <Text>Movements</Text> : <Text></Text>,
+          headerShown: false,
+          tabBarLabel: ({ focused }) => focused ? <Text>Moves</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="run" color={color} size={size} />
         }} />
         <Tabs.Screen name="app_settings" options={{
           title: "Settings",
-          tabBarLabel: ({ focused }) => focused ? <Text>Settings</Text> : <Text></Text>,
+          tabBarLabel: ({ focused }) => focused ? <Text>Settings</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="cog" color={color} size={size} />
         }} />
       </Tabs>

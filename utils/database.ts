@@ -36,6 +36,15 @@ export const initDatabase = () => {
                 PRIMARY KEY (date, exercise_pos, pos),
                 FOREIGN KEY (date, exercise_pos) REFERENCES exercises(date, pos)
             );
+
+            -- Table representations of lists so I have mutability and long-term storage
+            CREATE TABLE IF NOT EXISTS exercise_names (
+                name TEXT PRIMARY KEY
+            );
+
+            CREATE TABLE IF NOT EXISTS variant_names (
+                name TEXT PRIMARY KEY
+            );
             `
         );
     } catch (error) {
@@ -55,6 +64,77 @@ export const resetDatabase = () => {
         console.log("DB reset");
     } catch (e) {
         console.error("DB reset fail:", e);
+        throw e;
+    }
+}
+
+// Gather limit many exercise names after the offset
+    // Ex: getExerciseNames(10,20) to get names 20-29
+export const getExerciseNames = (limit: number = 10, offset: number = 0): string[] => {
+    try {
+        const rows = db.getAllSync(
+            'SELECT name FROM exercise_names ORDER BY name LIMIT ? OFFSET ?',
+            [limit, offset] 
+        ) as { name: string }[];
+        return rows.map(row => row.name);
+    } catch (e) {
+        console.error('Error fetching exercise names:', e);
+        throw e;
+    }
+};
+
+export const insertExerciseName = (name: string): void => {
+    if (name === '') { return; }
+    try {
+        db.runSync('INSERT OR IGNORE INTO exercise_names (name) VALUES (?)', [name]);
+    } catch (e) {
+        console.error('Error inserting exercise name:', e);
+        throw e;
+    }
+};
+
+export const deleteExerciseNames = (names: string[]): void => {
+    if (names.length === 0) { return; }
+    try {
+        const placeholders = names.map(() => '?').join(', ');
+        db.runSync(`DELETE FROM exercise_names WHERE name IN (${placeholders})`, names);
+    } catch (e) {
+        console.error('Error deleting exercise names:', e);
+        throw e;
+    }
+};
+
+// Gather limit many variant names after the offset
+export const getVariantNames = (limit: number = 10, offset: number = 0): string[] => {
+    try {
+        const rows = db.getAllSync(
+            'SELECT name FROM variant_names ORDER BY name LIMIT ? OFFSET ?',
+            [limit, offset]
+        ) as { name: string }[];
+        return rows.map(row => row.name);
+    } catch (e) {
+        console.error('Error fetching variant names:', e);
+        throw e;
+    }
+};
+
+export const insertVariantName = (name: string): void =>  {
+    if (name === '') { return; }
+    try {
+        db.runSync('INSERT OR IGNORE INTO variant_names (name) VALUES (?)', [name]);
+    } catch (e) {
+        console.error('Error inserting variant name:', e);
+        throw e;
+    }
+}
+
+export const deleteVariantNames = (names: string[]): void => {
+    if (names.length === 0) { return; }
+    try {
+        const placeholders = names.map(() => '?').join(', ');
+        db.runSync(`DELETE FROM variant_names WHERE name IN (${placeholders})`, names);
+    } catch (e) {
+        console.error('Error deleting variant names:', e);
         throw e;
     }
 }
@@ -181,7 +261,7 @@ export const insertWorkout = (workoutData: WorkoutData): number => {
         // Insert workout's exercises
         const exercises = workoutData.exercises;
         for (let i=0; i<exercises.length; i++) {
-            const exerciseResult = db.runSync(
+            db.runSync(
                 'INSERT INTO exercises (date, pos, name, variant) VALUES (?,?,?,?)',
                 [date_id, i+1, exercises[i].name, exercises[i].variant || '']
             );
@@ -189,7 +269,7 @@ export const insertWorkout = (workoutData: WorkoutData): number => {
             // Insert exercise's sets
             const sets = exercises[i].sets;
             for (let j=0; j<sets.length; j++) {
-                const setResult = db.runSync(
+                db.runSync(
                     'INSERT INTO sets (date, exercise_pos, pos, resistance, reps, is_drop, has_partials, is_uni) VALUES (?,?,?,?,?,?,?,?)',
                     [date_id, i+1, j+1, sets[j].resistance || '', sets[j].reps, sets[j].is_drop || 0, sets[j].has_partials || 0, sets[j].is_uni || 0]
                 );

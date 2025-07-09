@@ -1,7 +1,6 @@
 import { View, TextInput, Text, Keyboard, Pressable } from 'react-native';
-import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore';
 import { useOptionsStore } from '@/utils/optionsStore';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface AutocompleteSelectProps {
     optionType: string; // 'exercises' or 'variants'
@@ -27,7 +26,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({
 
     const filteredOptions = options
         .filter(option => option.toLowerCase().includes(query.toLowerCase())) // Simple filtering
-        .slice(0, 5); // Limit to first 5 matches
+        .slice(0, 4); // Limit to first 5 matches
 
     return ( 
         <View>

@@ -9,7 +9,7 @@ import { useOptionsStore } from '@/utils/optionsStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useCallback, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const NewWorkout = () => {
@@ -119,7 +119,7 @@ const NewWorkout = () => {
             </View>
 
             <Pressable // Add exercise
-              className="p-4 m-2 rounded-full bg-[#FFDD80] w-40 items-center"
+              className="p-4 m-2 rounded-full bg-[#FFDD80] w-40 items-center z-1"
               onPress={addExercise}
             >
               <Text>Add Exercise</Text>
