@@ -2,6 +2,7 @@
 import { View, Text, Pressable, TextInput } from 'react-native';
 import { useEffect, useCallback, useState } from 'react';
 import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore'
+import { triggerHaptic } from '@/utils/haptics';
 // import Dropdown from '@/components/Dropdown';
 import Checkbox from '@/components/Checkbox';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -38,6 +39,7 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
     const handleDeleteSet = useCallback(() =>  {
         // If there is only one set, do not allow deletion
         if (thisExercise.setOrder.length <= 1) { return; }
+        triggerHaptic('tap');
         removeSet(exerciseId, thisSet.id);
         // Update set data with next set in order unless at end (then show previous)
         if (curSetIndex < thisExercise.setOrder.length - 1) {
@@ -57,7 +59,7 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
         <View className="flex-col items-center -mb-12">
             <View className="flex-row h-[53px] w-80 items-center justify-center bg-[#55868C] gap-x-3 rounded-t-[24px]">
                 {editable && (<View // Delete set
-                    className="absolute w-28 left-4 flex-row bg-[##FFDD80] rounded-full -ml-20">
+                    className="absolute w-28 left-4 flex-row bg-[#FFDD80] rounded-full -ml-20">
                     <Pressable // Delete set button
                         onPress={handleDeleteSet}
                         className="p-4 rounded-full"
@@ -67,7 +69,12 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
                 </View> )}
                 <Pressable // Previous set button
                         className="p-4 rounded-full bg-blue-50 -ml-20 z-10"
-                        onPress={() => curSetIndex > 0 ? setCurSetIndex(curSetIndex - 1) : null}
+                        onPress={() => {
+                            if (curSetIndex > 0) {
+                                setCurSetIndex(curSetIndex - 1);
+                                triggerHaptic('light');
+                            }
+                        }}
                     >
                         <Ionicons name="chevron-back" size={24} color={curSetIndex === 0 ? "grey" : "black"} />
                 </Pressable>
@@ -89,7 +96,7 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
                 />
                 <Pressable // Next set button
                     className="p-4 rounded-full bg-blue-50 -mr-20 z-10"
-                    onPress={() => curSetIndex < thisExercise.setOrder.length - 1 ? setCurSetIndex(curSetIndex + 1) : null}
+                    onPress={() => {if(curSetIndex < thisExercise.setOrder.length - 1) { setCurSetIndex(curSetIndex + 1); triggerHaptic('light'); }}}
                 >
                     <Ionicons name="chevron-forward" size={24} color={curSetIndex === thisExercise.setOrder.length - 1 ? "grey" : "black"} />
                 </Pressable>
@@ -100,6 +107,7 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
                         onPress={()=> {
                             addSet(exerciseId);
                             setCurSetIndex(thisExercise.setOrder.length); // Move to the new set
+                            triggerHaptic('tap');
                         }}
                     >
                         <MaterialCommunityIcons name="plus-circle-outline" size={24} color="black" />

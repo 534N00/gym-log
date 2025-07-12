@@ -1,6 +1,7 @@
 import { Text, Pressable } from 'react-native';
 import { useCallback } from 'react';
 import { useRouter } from 'expo-router';
+import { triggerHaptic } from '@/utils/haptics';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 interface WorkoutPreviewProps {
@@ -13,6 +14,7 @@ const WorkoutPreview: React.FC<WorkoutPreviewProps> = ({ workoutId, readable_dat
     const router = useRouter();
     const handlePress = useCallback(() => {
         router.push(`/workout_history/${workoutId}`);
+        triggerHaptic('tap');
     }, [workoutId, router]);
 
     return (

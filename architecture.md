@@ -6,3 +6,4 @@ Zustand for state management and conditional rendering
 MMKV for user preference device key-value storage
 @react-native-community/datetimepicker
 react-native-calendars
+expo-haptics

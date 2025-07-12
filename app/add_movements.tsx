@@ -35,6 +35,7 @@ const AddMovements = () => {
     } else {
       removeVariants([...checked]);
     }
+    setChecked(new Set());
   }, [isExer, checked, removeExercises, removeVariants]);
 
   return (
@@ -42,8 +43,7 @@ const AddMovements = () => {
           <GradientBlock/>
           <SafeAreaView className='flex-1' edges={['top']}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex:1,}} keyboardVerticalOffset={-10}>
-              <View
-                // content container
+              <View // content container
                 className="px-6 pt-2 h-full flex-1 items-center">
                 <View // Header
                   className="flex-row flex-wrap mt-2 mb-8">
@@ -67,12 +67,12 @@ const AddMovements = () => {
                       addVariant(inputValue);
                     }
                     setInputValue('');
-                    console.log('insert success?'); //////////////////////////////
                   }}
                 >
                   <Text>Submit</Text>
                 </Pressable>
-                <View className="m-4 p-[1px] bg-gray-500 w-96 rounded-full"/>
+                <View // horizontal rule
+                  className="m-4 p-[1px] bg-gray-500 w-96 rounded-full"/>
 
                 <View className="w-80 m-2">
                   <Text className="text-xl font-semibold text-center">Here&apos;s what {"exercises/variants"} you&apos;re doing already</Text>
@@ -93,7 +93,7 @@ const AddMovements = () => {
                   contentContainerStyle={{ paddingBottom: 16 }}
                 />
                 <View className="flex-row m-4 items-center justify-center">
-                  <Pressable className={`${checked.size !== 0 ? 'bg-red-500' : 'bg-red-800'} m-2 w-48 p-4 rounded-3xl`} onPress={handleDelete}>
+                  <Pressable className={`${checked.size !== 0 ? 'bg-red-500' : 'bg-red-800'} m-2 w-48 p-4 rounded-full`} onPress={handleDelete}>
                     <Text className='text-center text-white'>Delete Selected</Text>
                   </Pressable>
                 </View>

@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+import { triggerHaptic } from '@/utils/haptics';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 interface CheckboxProps {
@@ -16,7 +17,8 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, editable=true, onCh
                 className="p-3 rounded-md bg-white shadow-md justify-center items-center"
                 disabled={!editable}
                 onPress={() => {
-                    onCheck(!checked)
+                    triggerHaptic('light');
+                    onCheck(!checked);
                 }}
             >
                 {checked && (

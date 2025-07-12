@@ -8,13 +8,10 @@ import { Tabs } from "expo-router";
 import { Text } from "react-native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-import GradientBlock from "@/components/GradientBlock";
-
 export default function RootLayout() {
+  // Initialize the database when the app starts
   useEffect(() => {
-    // Initialize the database when the app starts
     initDatabase();
-    // console.log("Database initialized");
   }, []);
 
   return (    
@@ -22,7 +19,7 @@ export default function RootLayout() {
     >
       <StatusBar style="auto"/>
       <Tabs screenOptions={{
-        tabBarActiveTintColor: "green",
+        tabBarActiveTintColor: "#55868C",
         tabBarStyle: {
           // backgroundColor: "white",
           borderTopLeftRadius:15,
@@ -56,6 +53,7 @@ export default function RootLayout() {
         }} />
         <Tabs.Screen name="app_settings" options={{
           title: "Settings",
+          headerShown: false,
           tabBarLabel: ({ focused }) => focused ? <Text>Settings</Text> : <></>,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="cog" color={color} size={size} />
         }} />
