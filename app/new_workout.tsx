@@ -119,8 +119,9 @@ const NewWorkout = () => {
             </View>
 
             <Pressable // Add exercise
-              className="p-4 m-2 rounded-full bg-[#FFDD80] w-40 items-center z-1"
+              className="p-4 m-2 rounded-full bg-[#FFDD80] w-40 items-center"
               onPress={addExercise}
+              style={{zIndex:-1}}
             >
               <Text>Add Exercise</Text>
             </Pressable>

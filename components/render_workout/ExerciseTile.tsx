@@ -3,7 +3,7 @@ import SetControls from '@/components/render_workout/SetControls';
 import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore';
 import { usePastWorkoutStore } from '@/utils/pastWorkoutStore';
 import Feather from '@expo/vector-icons/Feather';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 interface ExerciseTileProps {
   eIndex: number; // Index of the exercise in the workout Exercise 0, 1, etc.
@@ -44,8 +44,8 @@ const ExerciseTile: React.FC<ExerciseTileProps> = ({ eIndex, exerciseId, editabl
                 setter={(newVariant: string) => updateExercise(exerciseId, { variant: newVariant })}
                 placeholder="variant name" />
               </>) : (<>
-              <TextInput className="bg-gray-200 w-60 rounded-lg mt-2" value={exercise.name} />
-              <TextInput className="bg-gray-200 w-60 rounded-lg mt-2" value={exercise.variant} />
+              <Text className="bg-gray-200 w-60 rounded-lg mt-2 p-3">{exercise.name} </Text>
+              <Text className="bg-gray-200 w-60 rounded-lg mt-2 p-3">{exercise.variant}</Text>
             </>)}
           </View>
         </View>

@@ -7,3 +7,4 @@ MMKV for user preference device key-value storage
 @react-native-community/datetimepicker
 react-native-calendars
 expo-haptics
+expo-file-system

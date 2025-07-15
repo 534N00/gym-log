@@ -115,7 +115,7 @@ const SetControls: React.FC<SetControlsProps> = ({ exerciseId, store, editable=f
                 </View> )}
             </View>
             <View // Checkboxes for set attributes
-                className="flex-row items-center justify-center gap-x-4 bg-[#55868C] h-10 w-80 rounded-bl-lg rounded-br-lg "
+                className="flex-row items-center justify-center gap-x-4 bg-[#55868C] h-10 w-80 rounded-bl-lg rounded-br-lg"
             >
                 <Checkbox label={"Drop"} checked={!!thisSet?.is_drop} editable={editable} onCheck={(check => updateSet(exerciseId, thisSet.id, { is_drop: check === true ? 1 : 0 }))}/>
                 <Checkbox label={"Partial"} checked={!!thisSet?.has_partials} editable={editable} onCheck={(check) => updateSet(exerciseId, thisSet.id, { has_partials: check === true ? 1 : 0 })}/>

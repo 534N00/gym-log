@@ -18,7 +18,7 @@ interface PastWorkoutState {
 
 export const usePastWorkoutStore = create<PastWorkoutState>((set) => {
     return  {
-        date: new Date("2024-03-14"),
+        date: new Date("2024-03-14"), // PI day!
         notes: '',
         tagColor: '',
         exerciseOrder: [],

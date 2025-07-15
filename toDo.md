@@ -1,12 +1,11 @@
 Currently working on:
-* adding autocomplete search for past exercises by name or primary muscle
-* also adding for new exercise input the primary muscle hit
 * settings screen
-* add some settings with MMKV (user name)
+* CSV DB export (maybe import too?)
 
 List of things I need to do:
 * paginate the user's calendar pulls or just load all of them (could be in hundreds)
 * add haptics to pressables
+* add some settings with MMKV (user name)
 
 List of features to add:
 * import CSV
@@ -19,3 +18,6 @@ List of nice-to-haves to add:
 * when adding new set to exercise, copy over weight and modifiers (unilat, etc.)
 * make setting for user to change base and accent colors
 * create dark mode/lightmode
+
+Notes:
+* AutocompleteSelect requires that you tap on an option. What you type in will not be submitted and is kept as state internal to the autocompleteselect. This restriction is to make user inputs consistent as I want the user to be able to search by exercise and we can't have them entering in "RDL" and "Romainian Deadlift", or "Lat Raises" and "Lateral Raises."

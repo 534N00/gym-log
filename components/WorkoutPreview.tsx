@@ -19,7 +19,7 @@ const WorkoutPreview: React.FC<WorkoutPreviewProps> = ({ workoutId, readable_dat
 
     return (
         <Pressable
-            className="flex-row p-3 w-52 h-14 mb-2 rounded-xl bg-gray-200 gap-x-2 items-center"
+            className="flex-row p-3 w-48 h-14 mb-2 rounded-xl bg-white gap-x-2 items-center"
             onPress={handlePress}
         >
             <MaterialIcons name="circle" size={24} color={color} />
