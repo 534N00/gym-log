@@ -1,4 +1,5 @@
-import { CompleteExerciseDate, unixToDate } from "@/utils/database";
+import { unixToDate } from '../../utils/database';
+import { CompleteExerciseDate } from "@/utils/databaseInterfaces";
 import { View, Text } from "react-native";
 import StatelessSetControls from "./StatelessSetControls";
 

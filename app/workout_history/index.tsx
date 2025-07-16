@@ -1,7 +1,8 @@
 import GradientBlock from '@/components/GradientBlock';
 import WorkoutPreview from '@/components/WorkoutPreview';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { getRecentExercises, getRecentWorkoutPreviews, getWorkoutPreviewsByDate, unixToDate, WorkoutFromDB, CompleteExerciseDate } from '@/utils/database';
+import { getRecentExercises, getRecentWorkoutPreviews, getWorkoutPreviewsByDate, unixToDate } from '@/utils/database';
+import { WorkoutFromDB, CompleteExerciseDate } from '@/utils/databaseInterfaces';
 import { triggerHaptic } from '@/utils/haptics';
 import { useOptionsStore } from '@/utils/optionsStore'; // for refresh tag\
 import { useEffect, useState } from 'react';

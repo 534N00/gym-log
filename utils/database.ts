@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import * as types from './databaseInterfaces';
 
 const db = SQLite.openDatabaseSync('workouts.db');
 
@@ -7,6 +8,7 @@ const db = SQLite.openDatabaseSync('workouts.db');
  */
 export const initDatabase = () => {
     try {
+        
         db.execSync( // Run SQL code that doesn't return data
             `
             CREATE TABLE IF NOT EXISTS workouts (
@@ -171,90 +173,11 @@ export const unixToDate = (timestamp: number): Date => {
     return new Date(timestamp * 1000);
 };
 
-// Input interfaces (for inserting data)
-export interface WorkoutData {
-    date: Date;
-    notes?: string;
-    tag_color: string;
-    exercises: ExerciseData[];
-}
-
-export interface ExerciseData {
-    name: string;
-    variant?: string;
-    sets: SetData[];
-}
-
-export interface SetData {
-    resistance?: number;
-    reps: number;
-    is_drop?: number;
-    has_partials?: number;
-    is_uni?: number;
-}
-
-// Database result interfaces (what comes back from queries)
-export interface WorkoutFromDB {
-    date: number; // Unix timestamp
-    notes: string | null;
-    tag_color: string;
-}
-
-export interface ExerciseFromDB {
-    date: number;
-    pos: number;
-    name: string;
-    variant: string | null;
-}
-
-export interface SetFromDB {
-    date: number;
-    exercise_pos: number;
-    pos: number;
-    resistance: number | null;
-    reps: number;
-    is_drop: number | null;
-    has_partials: number | null;
-    is_uni: number | null;
-}
-
-// Return interfaces (what functions return)
-// CompleteWorkout, CompleteExercise, CompleteSet for when returning full workout
-export interface CompleteWorkout {
-    date: number;
-    notes: string;
-    tag_color: string;
-    date_obj: Date;
-    exercises: CompleteExercise[];
-}
-
-export interface CompleteExercise {
-    name: string;
-    variant: string;
-    sets: CompleteSet[];
-}
-
-// CompleteExerciseDate for when still needing date
-export interface CompleteExerciseDate {
-    date: number;
-    name: string;
-    variant: string;
-    sets: CompleteSet[];
-}
-
-export interface CompleteSet {
-    resistance: number;
-    reps: number;
-    is_drop: number;
-    has_partials: number;
-    is_uni: number ;
-}
-
 /**
  * For inserting a full log when a workout is complete
  * @param workoutData Full workout data of exercises and sets to input into DB
  */
-export const insertWorkout = (workoutData: WorkoutData): number => {
+export const insertWorkout = (workoutData: types.WorkoutData): number => {
     try {
         // Insert workout
         const unixTimestamp = dateToUnix(workoutData.date);
@@ -305,12 +228,12 @@ export const getMostRecentDate = (): Date | null => {
  * @param limit how many workouts to retrieve
  * @returns List of base information for workouts
  */
-export const getRecentWorkoutPreviews = (limit?: number, offset: number=0): WorkoutFromDB[] => {
+export const getRecentWorkoutPreviews = (limit?: number, offset: number=0): types.WorkoutFromDB[] => {
     try {
         // Get limited many or all
         const sql = limit ? 'SELECT * FROM workouts ORDER BY date DESC LIMIT ? OFFSET ?' : 'SELECT * FROM workouts ORDER BY date DESC';
         const params = limit ? [limit, offset] : [];
-        const previews = db.getAllSync(sql, params) as WorkoutFromDB[];
+        const previews = db.getAllSync(sql, params) as types.WorkoutFromDB[];
         return previews;
     } catch (error) {
         console.error(`Error fetching workouts previews:`, error);
@@ -324,11 +247,11 @@ export const getRecentWorkoutPreviews = (limit?: number, offset: number=0): Work
  * @param limit Number of previews to get (default 6)
  * @returns List of base information for workouts
  */
-export const getWorkoutPreviewsByDate = (dateString: string, limit: number = 6): WorkoutFromDB[] => {
+export const getWorkoutPreviewsByDate = (dateString: string, limit: number = 6): types.WorkoutFromDB[] => {
     const [start, end] = dateStringToUnixRange(dateString);
     try {
         const sql = 'SELECT * FROM workouts WHERE date BETWEEN ? AND ? ORDER BY date LIMIT ?';
-        const previews = db.getAllSync(sql, [start, end, limit]) as WorkoutFromDB[];
+        const previews = db.getAllSync(sql, [start, end, limit]) as types.WorkoutFromDB[];
         return previews;
     } catch (e) {
         console.error(`Error fetching workout previews for (${dateString}):`, e);
@@ -341,34 +264,34 @@ export const getWorkoutPreviewsByDate = (dateString: string, limit: number = 6):
  * @param date_id The Unix timestamp of the workout (would already have been availiable when getRecentWorkoutPreviews is used for UI rendering)
  * @returns CompleteWorkout object of data for workout, all exercises, and all sets of exercises
  */
-export const getCompleteWorkout = (date_id: number): CompleteWorkout | null => {
+export const getCompleteWorkout = (date_id: number): types.CompleteWorkout | null => {
     try {
         // Get base workout info
-        const workout = db.getFirstSync('SELECT * FROM workouts WHERE date = ?', [date_id]) as WorkoutFromDB | null;
+        const workout = db.getFirstSync('SELECT * FROM workouts WHERE date = ?', [date_id]) as types.WorkoutFromDB | null;
         if (!workout) { return null; } // If workout somehow doens't exist (shouln't be the case though)
         
         // Get exercises
-        const exercises = db.getAllSync('SELECT * FROM exercises WHERE date = ? ORDER BY pos', [date_id]) as ExerciseFromDB[];
+        const exercises = db.getAllSync('SELECT * FROM exercises WHERE date = ? ORDER BY pos', [date_id]) as types.ExerciseFromDB[];
 
         // Get sets for each exercise and use combined DB information
         // to build out the full workout as one object
-        const completedExercises: CompleteExercise[] = exercises.map(exercise => {
+        const completedExercises: types.CompleteExercise[] = exercises.map(exercise => {
             // Get raw set DB rows
             const setsFromDb = db.getAllSync(`SELECT *
                                         FROM sets
                                         WHERE date=? AND exercise_pos=?
                                         ORDER BY pos`,
-                            [date_id, exercise.pos]) as SetFromDB[];
+                            [date_id, exercise.pos]) as types.SetFromDB[];
             // Remove `date`, `exercise_pos`, and `pos` keys from objects (unnecessary) and retype
             // Also give values to anything that is in the db as null
-            const sets: CompleteSet[] = setsFromDb.map(({ date, exercise_pos, pos, resistance, reps, is_drop, has_partials, is_uni }) => ({
+            const sets: types.CompleteSet[] = setsFromDb.map(({ date, exercise_pos, pos, resistance, reps, is_drop, has_partials, is_uni }) => ({
                 resistance: resistance ?? 0, reps: reps ?? 0, is_drop: is_drop ?? 0, has_partials: has_partials ?? 0, is_uni: is_uni ?? 0
             }));
             return {
                 name: exercise.name,
                 variant: exercise.variant,
                 sets: sets
-            } as CompleteExercise;
+            } as types.CompleteExercise;
         });
 
         return {
@@ -389,20 +312,20 @@ export const getCompleteWorkout = (date_id: number): CompleteWorkout | null => {
  * @param options object of keys (exercise_name?, primary_muscle?, variant?, limit?=3)
  * @returns List of CompleteExercise objects will full data for sets
  */
-export const getRecentExercises = (exercise_name: string, variant?: string, limit: number = 3): CompleteExerciseDate[] => {
+export const getRecentExercises = (exercise_name: string, variant?: string, limit: number = 3): types.CompleteExerciseDate[] => {
     try {
         // Get data from DB
-        let exercises: ExerciseFromDB[] = [];
+        let exercises: types.ExerciseFromDB[] = [];
         if (exercise_name && variant) {
             exercises = db.getAllSync(
                 'SELECT * FROM exercises WHERE name=? AND variant=? ORDER BY date DESC LIMIT ?',
                 [exercise_name, variant, limit]
-            ) as ExerciseFromDB[];
+            ) as types.ExerciseFromDB[];
         } else if (exercise_name) {
             exercises = db.getAllSync(
                 'SELECT * FROM exercises WHERE name=? ORDER BY date DESC LIMIT ?',
                 [exercise_name, limit]
-            ) as ExerciseFromDB[];
+            ) as types.ExerciseFromDB[];
         } else {
             // Handle case where exercise_name is not provided
             console.error('No exercise name given to retreive for');
@@ -410,9 +333,9 @@ export const getRecentExercises = (exercise_name: string, variant?: string, limi
         }
         
         // Reformat DB data into nice JS object
-        const completedExercises: CompleteExerciseDate[] = exercises.map(exercise => {
-            const setsFromDb = db.getAllSync('SELECT * FROM sets WHERE date=? AND exercise_pos=? ORDER BY pos', [exercise.date, exercise.pos]) as SetFromDB[];
-            const sets: CompleteSet[] = setsFromDb.map(({ resistance, reps, is_drop, has_partials, is_uni, ...rest }) => ({
+        const completedExercises: types.CompleteExerciseDate[] = exercises.map(exercise => {
+            const setsFromDb = db.getAllSync('SELECT * FROM sets WHERE date=? AND exercise_pos=? ORDER BY pos', [exercise.date, exercise.pos]) as types.SetFromDB[];
+            const sets: types.CompleteSet[] = setsFromDb.map(({ resistance, reps, is_drop, has_partials, is_uni, ...rest }) => ({
                 resistance: resistance ?? 0, reps: reps ?? 0, is_drop: is_drop ?? 0, has_partials: has_partials ?? 0, is_uni: is_uni ?? 0
             }));
             return {
@@ -428,6 +351,66 @@ export const getRecentExercises = (exercise_name: string, variant?: string, limi
                        exercise_name=${exercise_name},  
                        variant=${variant},  
                        limit=${limit} failed:`, e);
+        throw e;
+    }
+};
+
+export const workoutsToCSV = () => {
+    try {
+        // Create columns
+        let csvRows = ['Date, Tag Color, Notes']; 
+        for (let n=1; n<=16; n++) { // Add columns for 16 exercises (can also make func that finds max number of exercises someone does)
+            csvRows[0] += `, Exercise ${n}, Sets (${n})`;
+        }
+        // For each workout
+        const workouts = db.getAllSync('SELECT * FROM workouts ORDER BY date') as types.WorkoutFromDB[];
+        workouts.forEach(workout => {
+            // Gather basic info
+            const dateObj = unixToDate(workout.date);
+            const dateStr = dateObj.getFullYear() + '-'
+                            + String(dateObj.getMonth()+1).padStart(2,'0') + '-'
+                            + String(dateObj.getDate()).padStart(2,'0');
+            const row: string[] = [dateStr, workout.tag_color, workout.notes || ''];
+            // Get all exercises of workout
+            const exercises = db.getAllSync('SELECT * FROM exercises WHERE date=? ORDER BY pos', [workout.date]) as types.ExerciseFromDB[];
+            exercises.forEach(exercise => {
+                row.push(`${exercise.name} (${exercise.variant})`);
+                // Get all sets of exercise
+                const sets = db.getAllSync('SELECT resistance, reps, is_drop, has_partials, is_uni FROM sets WHERE date=? AND exercise_pos=? ORDER BY pos', [workout.date, exercise.pos]) as types.SetFromDB[];
+                let setStr = '"';
+                sets.forEach((set, index) => {
+                    setStr += `${set.resistance} → ${set.reps}`;
+                    if (set.is_drop || set.has_partials || set.is_uni) {
+                        setStr += ` (${set.is_drop ? 'Drop.' : ''}${set.has_partials ? 'Part.' : ''}${set.is_uni ? 'Uni.' : ''})`
+                    }
+                    setStr += `${index !== sets.length - 1 ? ' | ' : ''}`;
+                });
+                setStr += '"'; // Close quotes to end CSV delimiting of commas for this field
+                row.push(setStr);
+            });
+            csvRows.push(row.join(','));
+        });
+        const csvString = csvRows.join('\n');
+        return csvString;
+    } catch (e) {
+        console.error('Error building workouts CSV:', e);
+        throw e;
+    }
+};
+
+export const exercisesAndVariantsToCSV = () => {
+    try {
+        const eNames: { name: string }[] = db.getAllSync('SELECT name FROM exercise_names ORDER BY name');
+        const vNames: { name: string }[] = db.getAllSync('SELECT name FROM variant_names ORDER BY name');
+        const csvRows = ['Name, Variant'];
+        const maxRows = Math.max(eNames.length, vNames.length);
+        for (let i=0; i<maxRows; ++i) {
+            csvRows.push(`${eNames[i]?.name || ''}, ${vNames[i]?.name || ''}`);
+        }
+        const csvString = csvRows.join('\n');
+        return csvString;
+    } catch (e) {
+        console.error('Error building exercises and variants CSV:', e);
         throw e;
     }
 };

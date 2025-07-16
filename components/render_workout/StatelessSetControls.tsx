@@ -1,4 +1,4 @@
-import { CompleteSet } from '@/utils/database';
+import { CompleteSet } from '@/utils/databaseInterfaces';
 import { View, Text, Pressable } from 'react-native';
 import { useState } from 'react';
 import { triggerHaptic } from '@/utils/haptics';

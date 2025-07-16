@@ -1,14 +1,17 @@
 import { View, Text, Pressable, Animated } from 'react-native'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import GradientBlock from '@/components/GradientBlock';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { resetDatabase } from '@/utils/database';
 import { triggerHaptic } from '@/utils/haptics';
+import * as exporting from '@/utils/exporting';
 
 const HOLD_DURATION = 5000; // 5 sec
 const BAR_CONSTANT = 11000; // <5 sec for bar to fill up
 
 const AppSettings = () => {
+  const [uriObj, setUriObj] = useState<{workoutsUri: string, namesUri: string}| null>(null);
+
   // Reset DB animation logic
   const animation = useRef(new Animated.Value(0)).current;
   const holdTimeout = useRef<NodeJS.Timeout | number | null>(null);
@@ -44,7 +47,28 @@ const AppSettings = () => {
           <View className='w-full'>
             <Text className="text-4xl font-bold">Settings</Text>
           </View>
-          <Pressable
+          <View>
+            <Text>User Data Export</Text>
+            <Pressable className='p-4 bg-white rounded-xl m-2' onPress={async () => {
+              triggerHaptic('tap');
+              const obj = await exporting.exportWorkouts();
+              setUriObj(obj);
+            }}>
+              <Text>Generate user data CSV</Text>
+            </Pressable>
+            {uriObj && (
+              <>
+              <Pressable onPress={() => { exporting.shareCsv(uriObj.workoutsUri) }} className="p-4 bg-white rounded-xl m-2">
+                <Text>Share workout data</Text>
+              </Pressable>
+              <Pressable onPress={() => { exporting.shareCsv(uriObj.namesUri) }} className="p-4 bg-white rounded-xl m-2">
+                <Text>Share exercise and variant options</Text>
+              </Pressable>
+              </>
+            )}
+          </View>
+          
+          <Pressable // reset DB
             className="p-4 bg-white rounded-2xl m-2 overflow-hidden"
             onPressIn={startHold}
             onPressOut={cancelHold}
