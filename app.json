@@ -4,27 +4,10 @@
     "slug": "gym-log",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icons/icon.png",
     "scheme": "gymlog",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "icon": {
-        "light": "./assets/images/icons/ios-light.png",
-        "dark": "./assets/images/icons/ios-dark.png",
-        "tinted": "./assets/images/icons/ios-tinted.png"
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icons/adaptive-icon.png",
-        "monochromeImage": "./assets/images/icons/adaptive-icon.png",
-        "backgroundImage": "./assets/images/svgs/layered-waves-haikei-light.svg 'should be png squre'",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -35,12 +18,12 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icons/adaptive-icon.png",
+          "image": "./assets/images/icons/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "fit",
           "backgroundColor": "#ffffff",
           "dark": {
-            "image": "./assets/images/icons/adaptive-icon.png",
+            "image": "./assets/images/icons/splash-icon.png",
             "backgroundColor": "#000000"
           }
         }
@@ -50,6 +33,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c0fccad8-ba43-4289-af35-cab6b5de230b"
+      }
+    },
+    "android": {
+      "package": "test.android.lift.log"
     }
   }
 }
