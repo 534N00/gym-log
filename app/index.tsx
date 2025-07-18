@@ -1,17 +1,18 @@
-import { ScrollView, Text, View, Pressable, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import GradientBlock from "@/components/GradientBlock";
+import { getMostRecentDate } from "@/utils/database/database";
+import { triggerHaptic } from "@/utils/haptics";
+import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import GradientBlock from "@/components/GradientBlock";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useOptionsStore } from "@/utils/optionsStore";
-import { getMostRecentDate } from "@/utils/database";
-import { triggerHaptic } from "@/utils/haptics";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TODAY = new Date(), MS_PER_DAY = 86400000;
 
 export default function Index() {
   const router = useRouter();
+  const userName = useOptionsStore(state => state.userName);
   const [recentDate, setRecentDate] = useState<Date | null>(TODAY);
 
   // Calc num of days between two dates
@@ -45,7 +46,7 @@ export default function Index() {
           <View // welcome message
             className="mb-6"
           >
-              <Text className="text-4xl font-bold mb-2">Welcome back!</Text>
+              <Text className="text-4xl font-bold mb-2">{`Welcome back${userName === '' ? '' : ` ${userName}`}!`}</Text>
               <Text className="text-xl font-semibold">Ready to get into it?</Text>
           </View>
           <View // bubbles

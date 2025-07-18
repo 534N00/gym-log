@@ -1,13 +1,17 @@
-import { View, useColorScheme, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+/**
+ * GradientBlock is used to create a gradient effect on the background of the app.
+ * The gradient transitions from #E6CBDF to #B587A8 but can be modified to change colors.
+ * The gradient is on top of a solid block with the same starting color, which is 30% of the screen height.
+ * The gradient block is absolutely positioned at the top of the screen with a fixed height of 200.
+ * @returns {JSX.Element} A JSX element representing the gradient block.
+ */
 const GradientBlock = () => {
   // Calculate height of display
   const screenHeight = Dimensions.get('window').height;
   const blockHeight = screenHeight * 0.3; // 30% of the screen height (can be stored in state)
-
-  const colorScheme = useColorScheme();
-  // Colors for light and dark mode
   
   return (
     <>

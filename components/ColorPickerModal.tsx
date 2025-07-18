@@ -1,13 +1,14 @@
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Modal, Pressable, View } from 'react-native';
+import { triggerHaptic } from "@/utils/haptics";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Modal, Pressable, View } from "react-native";
 
 const COLORS = [
-    '#FF5733',
-    '#33FF57',
-    '#3357FF',
-    '#F1C40F',
-    '#8E44AD',
-    '#E74C3C',
+    "#FF5733",
+    "#33FF57",
+    "#3357FF",
+    "#F1C40F",
+    "#8E44AD",
+    "#f7f335ff",
 ];
 
 interface ColorPickerModalProps {
@@ -16,8 +17,23 @@ interface ColorPickerModalProps {
     setSelected: (color: string) => void;
 }
 
-const ColorPickerModal: React.FC<ColorPickerModalProps> = ({visible, setVisibility, setSelected}) => {
-    
+/**
+ * A modal that displays a color picker. It will appear when the
+ * `visible` prop is true, and it will close when the user taps
+ * outside of the color picker or selects a color.
+ *
+ * @prop {boolean} visible - Whether the modal is visible or not
+ * @prop {(visible: boolean) => void} setVisibility - A function to
+ * set the visibility of the modal
+ * @prop {(color: string) => void} setSelected - A function to
+ * call when the user selects a color
+ * @returns {JSX.Element} - The rendered color picker modal
+ */
+const ColorPickerModal: React.FC<ColorPickerModalProps> = ({
+    visible,
+    setVisibility,
+    setSelected,
+}) => {
     return (
         <Modal
             animationType="fade"
@@ -30,11 +46,15 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({visible, setVisibili
                 onPress={() => setVisibility(false)}
             >
                 <Pressable
-                    className='absolute top-20 right-5'
-                    onPress={e => e.stopPropagation()}
-                    
+                    className="absolute top-20 right-5"
+                    onPress={(e) => e.stopPropagation()}
                 >
-                    <View style={{backgroundColor: 'rgba(230,230,230,0.6)', borderColor: 'rgba(255,255,255,0.5)', borderWidth: 1}}
+                    <View
+                        style={{
+                            backgroundColor: "rgba(230,230,230,0.6)",
+                            borderColor: "rgba(255,255,255,0.5)",
+                            borderWidth: 1,
+                        }}
                         className="rounded-lg p-4 h-[110px] w-[157px] flex-row flex-wrap bg-opacity-40 backdrop-blur-sm"
                     >
                         {COLORS.map((color: string) => (
@@ -42,13 +62,14 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({visible, setVisibili
                                 className="p-1"
                                 key={color}
                                 onPress={() => {
+                                    triggerHaptic("tap");
                                     setSelected(color);
                                     setVisibility(false);
                                 }}
                             >
-                                <MaterialIcons 
-                                    name="circle" 
-                                    size={35} 
+                                <MaterialIcons
+                                    name="circle"
+                                    size={35}
                                     color={color}
                                 />
                             </Pressable>

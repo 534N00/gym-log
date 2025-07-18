@@ -1,15 +1,20 @@
-import { View, Text, Pressable, Animated } from 'react-native'
-import { useRef, useState } from 'react'
+import DismissKeyboardWrapper from '@/components/DismissKeyboardWrapper';
 import GradientBlock from '@/components/GradientBlock';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { resetDatabase } from '@/utils/database';
-import { triggerHaptic } from '@/utils/haptics';
+import { resetDatabase } from '@/utils/database/database';
 import * as exporting from '@/utils/exporting';
+import { triggerHaptic } from '@/utils/haptics';
+import { useOptionsStore } from '@/utils/zustand_stores/optionsStore';
+import { useRef, useState } from 'react';
+import { Animated, Pressable, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HOLD_DURATION = 5000; // 5 sec
 const BAR_CONSTANT = 11000; // <5 sec for bar to fill up
 
 const AppSettings = () => {
+  const userName = useOptionsStore(state => state.userName);
+  const setUserName = useOptionsStore(state => state.setUserName);
+  const [userNameField, setUserNameField] = useState(userName);
   const [uriObj, setUriObj] = useState<{workoutsUri: string, namesUri: string}| null>(null);
 
   // Reset DB animation logic
@@ -40,54 +45,83 @@ const AppSettings = () => {
   return (
     <View className="flex-1 bg-[#B587A8]">
       <GradientBlock />
-      <SafeAreaView className='flex-1' edges={['top']}>
-        <View // content continer
-          className="px-6 pt-2 flex-1 items-center"
-        >
-          <View className='w-full'>
-            <Text className="text-4xl font-bold">Settings</Text>
-          </View>
-          <View>
-            <Text>User Data Export</Text>
-            <Pressable className='p-4 bg-white rounded-xl m-2' onPress={async () => {
-              triggerHaptic('tap');
-              const obj = await exporting.exportWorkouts();
-              setUriObj(obj);
-            }}>
-              <Text>Generate user data CSV</Text>
-            </Pressable>
-            {uriObj && (
-              <>
-              <Pressable onPress={() => { exporting.shareCsv(uriObj.workoutsUri) }} className="p-4 bg-white rounded-xl m-2">
-                <Text>Share workout data</Text>
-              </Pressable>
-              <Pressable onPress={() => { exporting.shareCsv(uriObj.namesUri) }} className="p-4 bg-white rounded-xl m-2">
-                <Text>Share exercise and variant options</Text>
-              </Pressable>
-              </>
-            )}
-          </View>
-          
-          <Pressable // reset DB
-            className="p-4 bg-white rounded-2xl m-2 overflow-hidden"
-            onPressIn={startHold}
-            onPressOut={cancelHold}
+      <DismissKeyboardWrapper>
+        <SafeAreaView className='flex-1' edges={['top']}>
+          <View // content continer
+            className="px-6 pt-2 flex-1 items-center"
           >
-            <Animated.View
-              className="absolute left-0 top-0 bottom-0 bg-[#F87171] rounded-xl opacity-60"
-              style={{
-                width: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              }}
-            />
-            <Text className="items-center font-bold">
-              Hold to reset DB
-            </Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
+            <View className='w-full mb-6'>
+              <Text className="text-4xl font-bold">Settings</Text>
+            </View>
+            <View className='w-full'>
+              <Text className='text-xl font-semibold w-full mb-3'>Personal Preferences</Text>
+              <Text className='text-lg'>User Name</Text>
+              <TextInput className='p-3 bg-white rounded-2xl w-52'
+                value={userNameField} onChangeText={setUserNameField} placeholder='Your name here' onBlur={() => setUserName(userNameField)}
+              />
+            </View>
+            <View // horizontal rule
+                    className="m-4 p-[1px] bg-gray-500 w-96 rounded-full"/>
+            <View className='w-full items-center'>
+              <Text className='text-xl font-semibold w-full'>User Data Export</Text>
+              <Pressable className='p-4 bg-[#C5EBC3] rounded-full m-2 w-52 items-center' onPress={async () => {
+                triggerHaptic('success');
+                const obj = await exporting.exportWorkouts();
+                setUriObj(obj);
+              }}>
+                <Text>Generate user data CSV</Text>
+              </Pressable>
+              <View className='flex-row'>
+                <Pressable onPress={() => {
+                  if (uriObj) { exporting.shareCsv(uriObj.workoutsUri);
+                    triggerHaptic('tap');
+                  }
+                }}
+                  className="p-4 rounded-full m-2 w-48 items-center"
+                  style={{backgroundColor: uriObj ? '#FFDD80' : '#DABD6B'}}
+                >
+                  <Text>Share workout data</Text>
+                </Pressable>
+                <Pressable
+                  className="p-4 rounded-full m-2 w-48 items-center"
+                  style={{backgroundColor: uriObj ? '#FFDD80' : '#DABD6B'}}
+                  onPress={() => {
+                    if (uriObj) {
+                      exporting.shareCsv(uriObj.namesUri);
+                      triggerHaptic('tap');
+                    }
+                }}>
+                  <Text>Share name data</Text>
+                </Pressable>
+              </View>
+            </View>
+            <View // horizontal rule
+                    className="m-4 p-[1px] bg-gray-500 w-96 rounded-full"/>
+            <View className='w-full items-center'>
+              <Text className='text-xl font-semibold w-full'>Danger Zone</Text>
+                <Pressable // reset DB
+                  className="p-4 bg-white rounded-2xl m-2 overflow-hidden"
+                  onPressIn={startHold}
+                  onPressOut={cancelHold}
+                >
+                <Animated.View
+                  className="absolute left-0 top-0 bottom-0 bg-[#F87171] rounded-xl opacity-60"
+                  style={{
+                    width: animation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0%', '100%'],
+                    }),
+                  }}
+                />
+                <Text className="items-center font-bold">
+                  Hold to reset DB
+                </Text>
+              </Pressable>
+            </View>
+            
+          </View>
+        </SafeAreaView>
+      </DismissKeyboardWrapper>
     </View>
   );
 };

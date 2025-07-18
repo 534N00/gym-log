@@ -1,6 +1,5 @@
 // Database input, output, and return interfaces
 
-
 // Database input interfaces
 export interface WorkoutData {
     date: Date;
@@ -63,7 +62,7 @@ export interface CompleteExercise {
     sets: CompleteSet[];
 }
 
-    // CompleteExerciseDate for when still needing date
+// CompleteExerciseDate for when still needing date
 export interface CompleteExerciseDate {
     date: number;
     name: string;
@@ -76,5 +75,5 @@ export interface CompleteSet {
     reps: number;
     is_drop: number;
     has_partials: number;
-    is_uni: number ;
+    is_uni: number;
 }

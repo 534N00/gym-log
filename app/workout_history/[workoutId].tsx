@@ -1,13 +1,13 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { View, ScrollView, KeyboardAvoidingView, Platform, Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect } from 'react';
-import { usePastWorkoutStore } from '@/utils/pastWorkoutStore';
-import { getCompleteWorkout } from '@/utils/database';
 import GradientBlock from '@/components/GradientBlock';
 import ExerciseTile from '@/components/render_workout/ExerciseTile';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import NoteBlock from '@/components/render_workout/NoteBlock';
+import { getCompleteWorkout } from '@/utils/database/database';
+import { usePastWorkoutStore } from '@/utils/zustand_stores/pastWorkoutStore';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useEffect } from 'react';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const OldWorkout = () => {

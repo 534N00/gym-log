@@ -1,17 +1,19 @@
 import "@/global.css"; // Import NativeWind styles
-import { initDatabase } from "@/utils/database"; // Import database initialization
+import { initDatabase } from "@/utils/database/database"; // Import database initialization
 import { useEffect } from "react";
 
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Tabs } from "expo-router";
-import { Text } from "react-native";
+import { hydrateStoreFromAsyncStorage } from "@/utils/asyncStorage";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Tabs } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Text } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   // Initialize the database when the app starts
   useEffect(() => {
     initDatabase();
+    hydrateStoreFromAsyncStorage();
   }, []);
 
   return (    

@@ -20,7 +20,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icons/adaptive-icon.png",
         "monochromeImage": "./assets/images/icons/adaptive-icon.png",
-        "backgroundImage": "./assets/images/svgs/layered-waves-haikei-light.svg",
+        "backgroundImage": "./assets/images/svgs/layered-waves-haikei-light.svg 'should be png squre'",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
@@ -45,7 +45,8 @@
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

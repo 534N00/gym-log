@@ -3,9 +3,10 @@ import GradientBlock from '@/components/GradientBlock';
 import DateBox from '@/components/render_workout/DateBox';
 import ExerciseTile from '@/components/render_workout/ExerciseTile';
 import NoteBlock from '@/components/render_workout/NoteBlock';
-import { insertWorkout } from '@/utils/database';
-import { useCurrentWorkoutStore } from '@/utils/newWorkoutStore';
-import { useOptionsStore } from '@/utils/optionsStore';
+import { insertWorkout } from '@/utils/database/database';
+import { triggerHaptic } from '@/utils/haptics';
+import { useCurrentWorkoutStore } from '@/utils/zustand_stores/newWorkoutStore';
+import { useOptionsStore } from '@/utils/zustand_stores/optionsStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useCallback, useState } from 'react';
@@ -31,6 +32,7 @@ const NewWorkout = () => {
   const [colorModalVisible, setColorModalVisible] = useState(false);
 
   const handleSubmit = useCallback(() =>  {
+    triggerHaptic('success');
     const exercisesArr = exerciseOrder.map((id) =>  {
       const ex = exercises[id];
       return {
@@ -54,11 +56,12 @@ const NewWorkout = () => {
     };
 
     try {
-      console.log(insertWorkout(workoutData));
+      insertWorkout(workoutData);
       resetWorkout();
       triggerRefresh(); // get past workouts callendar to refresh
     } catch (error) {
       console.error("Failed to insert workout:", error);
+      throw error;
     }
   }, [date, exerciseOrder, exercises, notes, resetWorkout, tagColor, triggerRefresh]);
 
@@ -91,7 +94,10 @@ const NewWorkout = () => {
               <View // Tag color and delete buttons
                 className="flex-row items-center justify-between w-[20%]"
               >
-                <Pressable onPress={() => setColorModalVisible(true)}>
+                <Pressable onPress={() => {
+                  triggerHaptic('light');
+                  setColorModalVisible(true);
+                }}>
                   <MaterialIcons name="circle" size={35} color={tagColor} />
                 </Pressable>
                 <ColorPickerModal
@@ -99,7 +105,10 @@ const NewWorkout = () => {
                   setVisibility={setColorModalVisible}
                   setSelected={setCurrentTagColor}
                 />
-                <Pressable onPress={resetWorkout}>
+                <Pressable onPress={() => {
+                  triggerHaptic('error');
+                  resetWorkout();
+                }}>
                   <Ionicons name="trash" color={"black"} size={35} />
                 </Pressable>
               </View>

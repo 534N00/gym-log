@@ -1,16 +1,16 @@
+import AutocompleteSelect from '@/components/AutocompleteSelect';
 import GradientBlock from '@/components/GradientBlock';
+import StatelessExerciseTile from '@/components/render_workout/StatelessExerciseTile';
 import WorkoutPreview from '@/components/WorkoutPreview';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { getRecentExercises, getRecentWorkoutPreviews, getWorkoutPreviewsByDate, unixToDate } from '@/utils/database';
-import { WorkoutFromDB, CompleteExerciseDate } from '@/utils/databaseInterfaces';
+import { getRecentExercises, getRecentWorkoutPreviews, getWorkoutPreviewsByDate, unixToDate } from '@/utils/database/database';
+import { CompleteExerciseDate, WorkoutFromDB } from '@/utils/database/databaseInterfaces';
 import { triggerHaptic } from '@/utils/haptics';
-import { useOptionsStore } from '@/utils/optionsStore'; // for refresh tag\
+import { useOptionsStore } from '@/utils/zustand_stores/optionsStore'; // for refresh tag\
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect, useState } from 'react';
-import { Text, View, Switch, Pressable, ScrollView } from 'react-native';
+import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AutocompleteSelect from '@/components/AutocompleteSelect';
-import StatelessExerciseTile from '@/components/render_workout/StatelessExerciseTile';
 
 const WorkoutHistory = () => {
   // Refresh tag for callendar when new submit
@@ -73,7 +73,9 @@ const WorkoutHistory = () => {
       if (previewsData.length > 0) {
         setLastDate(previewsData[previewsData.length-1].date);
         processPreviewData(previewsData);
-      } else { setCanLoadMore(false); console.log('No more to load'); }
+      } else {
+        setCanLoadMore(false); // no more to try and load
+      }
     }
   };
 
@@ -107,7 +109,7 @@ const WorkoutHistory = () => {
 
   // On search, query db for recent exercise instances and set to state for rendering
   const handleSearch = () => {
-    triggerHaptic('success');
+    triggerHaptic('tap');
     // Update workout previews by query db
     const data = soughtVariant === '' ? getRecentExercises(soughtExercise) : getRecentExercises(soughtExercise, soughtVariant);
     setExercises(data);
@@ -160,7 +162,7 @@ const WorkoutHistory = () => {
               <View className='min-h-60 items-center -mb-0'>
                 <AutocompleteSelect size='big' optionType={'exercises'} setter={setSoughtExercise} placeholder={'Search by exercise'} />
                 <AutocompleteSelect size='small' optionType={'variants'} setter={setSoughtVariant} placeholder={'Search by variant'} />
-                <Pressable className='bg-white rounded-xl p-4 mt-4 w-32 items-center' onPress={handleSearch}>
+                <Pressable className='p-4 m-4 rounded-full bg-[#FFDD80] w-40 items-center' onPress={handleSearch}>
                   <Text>Search</Text>
                 </Pressable>
               </View>

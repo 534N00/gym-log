@@ -10,6 +10,13 @@ interface WorkoutPreviewProps {
     color: string,
 };
 
+/**
+ * A button that when pressed, navigates to the workout with the given workoutId.
+ * @param {{workoutId: number, readable_date: string, color: string}} props
+ * @prop {number} workoutId The id of the workout this button will navigate to
+ * @prop {string} readable_date The string that will be rendered in the button
+ * @prop {string} color The color of the circle that will be rendered in the button
+ */
 const WorkoutPreview: React.FC<WorkoutPreviewProps> = ({ workoutId, readable_date, color }) => {
     const router = useRouter();
     const handlePress = useCallback(() => {

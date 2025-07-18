@@ -9,6 +9,10 @@ List of things I need to do:
 List of features to add:
 * get app icon and open screen to work
 
+Refactoring possibilities:
+* Create button component(s) with type (for color) and width props
+* Create horizontal rule component with width as prop
+
 List of nice-to-haves to add:
 * when adding new set to exercise, copy over weight and modifiers (unilat, etc.)
 * make setting for user to change base and accent colors
