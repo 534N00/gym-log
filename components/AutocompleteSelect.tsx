@@ -63,6 +63,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({
                         ? "bg-gray-200 w-60 rounded-lg mt-2"
                         : "p-2 w-80 h-16 rounded-xl bg-white font-bold text-2xl"
                 }
+                placeholderTextColor="grey"
                 value={query}
                 onChangeText={(text) => {
                     // Update query and show dropdown

@@ -37,39 +37,110 @@ const SetControls: React.FC<SetControlsProps> = ({
     );
     const [thisSet, setThisSet] = useState<any>(null); // New set data
     const [curSetIndex, setCurSetIndex] = useState(0); // New set index
+    const [resistanceInput, setResistanceInput] = useState("");
+    const [repsInput, setRepsInput] = useState("");
 
     const addSet = useNewWorkoutStore((state) => state.addSet);
     const updateSet = useNewWorkoutStore((state) => state.updateSet);
     const removeSet = useNewWorkoutStore((state) => state.removeSet);
 
-    // Sync current set data based on current seat index
-    const syncData = useCallback(() => {
-        // Retrieve now current set index from set order
+    const hydrateSetData = () => {
         const setId = thisExercise.setOrder[curSetIndex];
-        // Use setId to get now current set data
-        setThisSet(setId ? thisExercise.sets[setId] : null);
-    }, [thisExercise, curSetIndex, setThisSet]);
+        const setData = setId ? thisExercise.sets[setId] : null;
+        setThisSet(setData);
+        setResistanceInput(
+            setData
+                ? setData.resistance === 0
+                    ? ""
+                    : String(setData.resistance)
+                : ""
+        );
+        setRepsInput(
+            setData ? (setData.reps === 0 ? "" : String(setData.reps)) : ""
+        );
+    };
 
-    // Handle deleting current set
-    const handleDeleteSet = useCallback(() => {
-        // If there is only one set, do not allow deletion
-        if (thisExercise.setOrder.length <= 1) {
+    useEffect(() => {
+        hydrateSetData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [curSetIndex, thisExercise]);
+
+    // Handlers for set controls
+    const handleDeleteSet = useCallback (() => {
+        if (thisExercise.setOrder.length < 2) {
             return;
         }
-        removeSet(exerciseId, thisSet.id);
-        // Update set data with next set in order unless at end (then show previous)
-        if (curSetIndex < thisExercise.setOrder.length - 1) {
-            syncData(); // Stay on the current set if it exists
-        } else {
-            setCurSetIndex(curSetIndex - 1); // Move to the previous set if at end
-            syncData();
+        removeSet(exerciseId, thisExercise.setOrder[curSetIndex]);
+        if (curSetIndex > 0) {
+            setCurSetIndex(curSetIndex - 1);
         }
-    }, [thisExercise, curSetIndex, thisSet, exerciseId, removeSet, syncData]);
+    }, [curSetIndex, exerciseId, removeSet, thisExercise.setOrder]);
 
-    // Initially sync data from state on mount
-    useEffect(() => {
-        syncData();
-    }, [syncData]);
+    const handlePrevSet = useCallback(() => {
+        if (curSetIndex > 0) {
+            setCurSetIndex(curSetIndex - 1);
+            triggerHaptic("light");
+        }
+    }, [curSetIndex]);
+
+    const handleNextSet = useCallback(() => {
+        if (curSetIndex < thisExercise.setOrder.length - 1) {
+            setCurSetIndex(curSetIndex + 1);
+            triggerHaptic("light");
+        }
+    }, [curSetIndex, thisExercise.setOrder.length]);
+
+    const handleAddSet = useCallback(() => {
+        addSet(exerciseId);
+        setCurSetIndex(thisExercise.setOrder.length); // Move to the new set
+    }, [exerciseId, addSet, thisExercise.setOrder.length]);
+
+    // Handlers for text inputs
+    const handleResistanceChange = useCallback((text: string) => {
+        setResistanceInput(text);
+        if (!thisSet?.id) { return; } // Safety check
+        // Allow empty string, or valid float (e.g. "7.5", "12.5")
+        if (text === "") {
+            updateSet(exerciseId, thisSet.id, { resistance: 0 });
+        } else if (/^\d*\.?\d*$/.test(text)) {
+            // Only update if the text is a valid float string and does not end with a dot
+            if (!text.endsWith(".")) {
+                const value = parseFloat(text);
+                if (!isNaN(value)) {
+                    updateSet(exerciseId, thisSet.id, { resistance: value });
+                }
+            }
+            // If ends with ".", don't update store, just update local state
+        }
+    }, [exerciseId, thisSet, updateSet]);
+
+    const handleRepsChange = useCallback((text: string) => {
+        setRepsInput(text);
+        if (!thisSet?.id) { return; } // Safety check
+        if (text === "") {
+            updateSet(exerciseId, thisSet.id, { reps: 0 });
+        } else if (!isNaN(parseInt(text))) {
+            updateSet(exerciseId, thisSet.id, {
+                reps: parseInt(text),
+            });
+        }
+    }, [exerciseId, thisSet, updateSet]);
+
+    // Handlers for checkboxes
+    const handleDropCheck = useCallback((check: boolean) => {
+        if (!thisSet?.id) return;
+        updateSet(exerciseId, thisSet.id, { is_drop: check ? 1 : 0 });
+    }, [exerciseId, thisSet, updateSet]);
+
+    const handlePartialCheck = useCallback((check: boolean) => {
+        if (!thisSet?.id) return;
+        updateSet(exerciseId, thisSet.id, { has_partials: check ? 1 : 0 });
+    }, [exerciseId, thisSet, updateSet]);
+
+    const handleUnilatCheck = useCallback((check: boolean) => {
+        if (!thisSet?.id) return;
+        updateSet(exerciseId, thisSet.id, { is_uni: check ? 1 : 0 });
+    }, [exerciseId, thisSet, updateSet]);
 
     return (
         <View className="flex-col items-center -mb-12">
@@ -96,12 +167,7 @@ const SetControls: React.FC<SetControlsProps> = ({
                 )}
                 <Pressable // Previous set button
                     className="p-4 rounded-full bg-blue-50 -ml-20 z-10"
-                    onPress={() => {
-                        if (curSetIndex > 0) {
-                            setCurSetIndex(curSetIndex - 1);
-                            triggerHaptic("light");
-                        }
-                    }}
+                    onPress={handlePrevSet}
                 >
                     <Ionicons
                         name="chevron-back"
@@ -112,35 +178,34 @@ const SetControls: React.FC<SetControlsProps> = ({
                 <Text className="text-white">Set {curSetIndex + 1}</Text>
                 <TextInput // Resistance input
                     className="bg-gray-200 rounded-lg w-12 font-medium text-center"
-                    keyboardType="numeric"
+                    keyboardType="decimal-pad"
                     editable={editable}
-                    onChangeText={(text) =>
-                        updateSet(exerciseId, thisSet.id, {
-                            resistance: parseFloat(text) || 0,
-                        })
+                    onChangeText={handleResistanceChange}
+                    value={
+                        editable
+                            ? resistanceInput
+                            : thisSet
+                            ? String(thisSet.resistance)
+                            : ""
                     }
-                    value={thisSet ? String(thisSet.resistance) : ""}
                 />
                 <Text className="text-white">for</Text>
                 <TextInput // Reps input
                     className="bg-gray-200 rounded-lg w-10 font-medium text-center"
                     keyboardType="numeric"
                     editable={editable}
-                    onChangeText={(text) =>
-                        updateSet(exerciseId, thisSet.id, {
-                            reps: parseInt(text) || 0,
-                        })
+                    onChangeText={handleRepsChange}
+                    value={
+                        editable
+                            ? repsInput
+                            : thisSet
+                            ? String(thisSet.reps)
+                            : ""
                     }
-                    value={thisSet ? String(thisSet.reps) : ""}
                 />
                 <Pressable // Next set button
                     className="p-4 rounded-full bg-blue-50 -mr-20 z-10"
-                    onPress={() => {
-                        if (curSetIndex < thisExercise.setOrder.length - 1) {
-                            setCurSetIndex(curSetIndex + 1);
-                            triggerHaptic("light");
-                        }
-                    }}
+                    onPress={handleNextSet}
                 >
                     <Ionicons
                         name="chevron-forward"
@@ -158,10 +223,7 @@ const SetControls: React.FC<SetControlsProps> = ({
                     >
                         <Pressable // Add set button
                             className="p-4 rounded-full"
-                            onPress={() => {
-                                addSet(exerciseId);
-                                setCurSetIndex(thisExercise.setOrder.length); // Move to the new set
-                            }}
+                            onPress={handleAddSet}
                         >
                             <MaterialCommunityIcons
                                 name="plus-circle-outline"
@@ -179,31 +241,19 @@ const SetControls: React.FC<SetControlsProps> = ({
                     label={"Drop"}
                     checked={!!thisSet?.is_drop}
                     editable={editable}
-                    onCheck={(check) =>
-                        updateSet(exerciseId, thisSet.id, {
-                            is_drop: check === true ? 1 : 0,
-                        })
-                    }
+                    onCheck={handleDropCheck}
                 />
                 <Checkbox
                     label={"Partial"}
                     checked={!!thisSet?.has_partials}
                     editable={editable}
-                    onCheck={(check) =>
-                        updateSet(exerciseId, thisSet.id, {
-                            has_partials: check === true ? 1 : 0,
-                        })
-                    }
+                    onCheck={handlePartialCheck}
                 />
                 <Checkbox
                     label={"Unilat"}
                     checked={!!thisSet?.is_uni}
                     editable={editable}
-                    onCheck={(check) =>
-                        updateSet(exerciseId, thisSet.id, {
-                            is_uni: check === true ? 1 : 0,
-                        })
-                    }
+                    onCheck={handleUnilatCheck}
                 />
             </View>
         </View>

@@ -1,0 +1,5 @@
+Colors used in this project are:
+* Thistle (#E6CBDF)
+* Jasmine (#FFDD80)
+* Dark Cyan (#55868C)
+* Tea Green (#C5EBC3)

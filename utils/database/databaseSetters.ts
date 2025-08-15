@@ -138,3 +138,21 @@ export const insertWorkout = (workoutData: types.WorkoutData): number => {
         return 0;
     }
 };
+
+/**
+ * Deletes a workout from the database based by referring to its date_id.
+ * @param date_id The date_id of the workout to be deleted.
+ * @returns A boolean indicating whether the deletion was successful.
+ *          Returns true if the workout was deleted successfully, false if an error occurs.
+ */
+export const deleteWorkout = (date_id: number): boolean => {
+    try {
+        db.runSync("DELETE FROM workouts WHERE date = ?", [date_id]);
+        db.runSync("DELETE FROM exercises WHERE date = ?", [date_id]);
+        db.runSync("DELETE FROM sets WHERE date = ?", [date_id]);
+        return true;
+    } catch (error) {
+        console.error("Error deleting workout:", error);
+        return false;
+    }
+};

@@ -16,6 +16,8 @@ interface OptionsStore {
     variantOptions: string[];
     addVariant: (name: string) => void;
     removeVariants: (names: string[]) => void;
+    initExerciseVariantOptions: () => void;
+    resetOptionsStore: () => void;
 
     // Refresh trigger for updating callendar
     refresh: boolean;
@@ -33,14 +35,29 @@ export const useOptionsStore = create<OptionsStore>((set) => {
     const LIMIT = 1000,
         OFFSET = 0;
     return {
+        resetOptionsStore: () => {
+            set({
+                exerciseOptions: [],
+                variantOptions: [],
+            });
+        },
         userName: "",
         setUserName: (name) => {
             AsyncStorage.setItem("userName", name);
             set(() => ({ userName: name }));
         },
         // Initial load from DB
-        exerciseOptions: getExerciseNames(LIMIT, OFFSET),
-        variantOptions: getVariantNames(LIMIT, OFFSET),
+        exerciseOptions: [],
+        variantOptions: [],
+
+        // Initial load of user added exercises and variants from DB.
+        // To be called after database is initialized.
+        initExerciseVariantOptions: () => {
+            set({
+                exerciseOptions: getExerciseNames(LIMIT, OFFSET),
+                variantOptions: getVariantNames(LIMIT, OFFSET),
+            });
+        },
 
         // Functions for modifying state and DB together
         addExercise: (name) => {

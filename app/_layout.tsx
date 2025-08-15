@@ -3,6 +3,7 @@ import { initDatabase } from "@/utils/database/database"; // Import database ini
 import { useEffect } from "react";
 
 import { hydrateStoreFromAsyncStorage } from "@/utils/asyncStorage";
+import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -10,11 +11,13 @@ import { Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
-  // Initialize the database when the app starts
+  // Initialize the database when the app starts and hydrate stores
+  const initExerciseVariantOptions = useOptionsStore((state) => state.initExerciseVariantOptions);
   useEffect(() => {
     initDatabase();
+    initExerciseVariantOptions();
     hydrateStoreFromAsyncStorage();
-  }, []);
+  });
 
   return (    
     <SafeAreaProvider // calculates safe area for SafeAreaViews      
@@ -24,9 +27,7 @@ export default function RootLayout() {
         tabBarActiveTintColor: "#55868C",
         tabBarStyle: {
           // backgroundColor: "white",
-          borderTopLeftRadius:15,
-          borderTopRightRadius:15,
-          // height: 60
+          height: 60
         }
       }}>
         <Tabs.Screen name="index" options={{

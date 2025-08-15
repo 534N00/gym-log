@@ -40,13 +40,18 @@ const StatelessSetControls: React.FC<StatelessSetControlsProps> = ({
                     />
                 </Pressable>
                 <Text className="text-white">Set {curSetIndex + 1}</Text>
-                <Text className="bg-gray-200 rounded-lg w-12 font-medium text-center">
-                    {String(sets[curSetIndex].resistance)}
-                </Text>
+                <View className="w-12 h-12 bg-gray-200 rounded-lg items-center justify-center">
+                    <Text className="font-medium">
+                        {String(sets[curSetIndex].resistance)}
+                    </Text>
+                </View>
                 <Text className="text-white">for</Text>
-                <Text className="bg-gray-200 rounded-lg w-10 font-medium text-center">
-                    {String(sets[curSetIndex].reps)}
-                </Text>
+                <View className='w-10 h-12 bg-gray-200 rounded-lg items-center justify-center'>
+                    <Text className="font-medium">
+                        {String(sets[curSetIndex].reps)}
+                    </Text>
+                </View>
+                
                 <Pressable // Next set button
                     className="p-4 rounded-full bg-blue-50 -mr-20 z-10"
                     onPress={() => {

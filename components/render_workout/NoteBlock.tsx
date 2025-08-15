@@ -37,6 +37,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({
                 onChangeText={(note: string) => setter && setter(note)}
                 textAlignVertical="top"
                 scrollEnabled={true}
+                placeholderTextColor="grey"
             />
         </>
     );

@@ -71,8 +71,8 @@ const setInitialState = () => {
         exercises: {
             [initialExerciseId]: {
                 id: initialExerciseId,
-                name: "n/a",
-                variant: "n/a",
+                name: "N/A",
+                variant: "M/A",
                 setOrder: [initialSetId],
                 sets: {
                     [initialSetId]: {
@@ -188,7 +188,6 @@ export const useNewWorkoutStore = create<WorkoutState>((set, get) => {
                 if (!targetSet) {
                     return state;
                 }
-
                 return {
                     exercises: {
                         ...state.exercises,

@@ -1,20 +1,16 @@
 Currently working on:
-* settings screen styling
-
-List of things I need to do:
-* paginate the user's calendar pulls or just load all of them (could be in hundreds)
-* add haptics to pressables
-* add some settings with MMKV (user name)
-
-List of features to add:
-* get app icon and open screen to work
+* improving currently clunky text number inputs
 
 Refactoring possibilities:
 * Create button component(s) with type (for color) and width props
 * Create horizontal rule component with width as prop
+* Replace get rid of pastWorkoutStore and switch to using StatelessExerciseTiles unless adding mutability to past workouts
 
-List of nice-to-haves to add:
-* when adding new set to exercise, copy over weight and modifiers (unilat, etc.)
+List of nice-to-haves that can be added:
+* toast/messages for when users successfully or failingly perform certain actions
+* flesh out iOS functionality
+* create a nice expo snack to better show off this repository
+* when adding new set to exercise, copy over weight and modifiers as the difference between sets is often minimal
 * make setting for user to change base and accent colors
 * create dark mode/lightmode
 * data import
