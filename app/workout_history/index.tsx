@@ -1,7 +1,8 @@
-import AutocompleteSelect from "@/components/AutocompleteSelect";
-import GradientBlock from "@/components/GradientBlock";
-import StatelessExerciseTile from "@/components/render_workout/StatelessExerciseTile";
-import WorkoutPreview from "@/components/WorkoutPreview";
+import { Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Calendar } from "react-native-calendars";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
     getRecentExercises,
     getRecentWorkoutPreviews,
@@ -13,13 +14,12 @@ import {
     WorkoutFromDB,
 } from "@/utils/database/databaseInterfaces";
 import { triggerHaptic } from "@/utils/haptics";
-import { useOptionsStore } from "@/utils/zustand_stores/optionsStore"; // for refresh tag\
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Switch, Text, View } from "react-native";
-import { Calendar } from "react-native-calendars";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import { useCalendarStore } from "@/utils/zustand_stores/calendarStore";
+import AutocompleteSelect from "@/components/AutocompleteSelect";
+import GradientBlock from "@/components/GradientBlock";
+import StatelessExerciseTile from "@/components/render_workout/StatelessExerciseTile";
+import WorkoutPreview from "@/components/WorkoutPreview";
 
 const WorkoutHistory = () => {
     // Refresh tag for callendar when new submit
@@ -41,7 +41,7 @@ const WorkoutHistory = () => {
     const [offset, setOffset] = useState(0);
     const [lastDate, setLastDate] = useState(3000000000000); // store last unix date in most recent preview DB query
     const [canLoadMore, setCanLoadMore] = useState(true);
-    
+
     const processPreviewData = (previewData: WorkoutFromDB[]) => {
         if (previewData.length === 0) {
             return;
@@ -85,7 +85,7 @@ const WorkoutHistory = () => {
 
         // Query for initial recent workouts
         const previewData = getRecentWorkoutPreviews(60);
-        processPreviewData(previewData); 
+        processPreviewData(previewData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh]);
 

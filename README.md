@@ -7,7 +7,7 @@ After user a Google form and its accompanying spread sheet for a year to log wor
 - easy search for recent instances of doing a certain exercise
 
 ## Features
-- Log workout sessions with sets, reps, and modifiers
+- Log workout sessions with sets, reps, and modifiers (with intervaled autosave)
 - Custom exercise (Benchpress, etc.) and variant selection (Barbell, Dumbbell, Cable, Machine, etc.)
 - CSV export of logs and input exercise/variant selection
 

@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from "react-native";
+import { useCallback } from "react";
 import { triggerHaptic } from "@/utils/haptics";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -24,16 +25,18 @@ const Checkbox: React.FC<CheckboxProps> = ({
     editable = true,
     onCheck,
 }) => {
+    const handleCheck = useCallback(() => {
+        triggerHaptic("light");
+        onCheck(!checked);
+    }, [onCheck, checked]);
+
     return (
         <View className="ml-2 mr-2 flex-row items-center gap-x-2">
             {label && <Text className="text-white">{label}</Text>}
             <Pressable
                 className="p-3 rounded-md bg-white shadow-md justify-center items-center"
                 disabled={!editable}
-                onPress={() => {
-                    triggerHaptic("light");
-                    onCheck(!checked);
-                }}
+                onPress={handleCheck}
             >
                 {checked && (
                     <FontAwesome

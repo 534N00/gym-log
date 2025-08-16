@@ -6,7 +6,6 @@ import {
     insertExerciseName,
     insertVariantName,
 } from "../database/databaseSetters";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 interface OptionsStore {
     // User added exercises and variants

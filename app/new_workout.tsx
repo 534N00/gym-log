@@ -3,13 +3,15 @@ import GradientBlock from "@/components/GradientBlock";
 import DateBox from "@/components/render_workout/DateBox";
 import ExerciseTile from "@/components/render_workout/ExerciseTile";
 import NoteBlock from "@/components/render_workout/NoteBlock";
+import { saveNewWorkoutToAsyncStorage } from "@/utils/asyncStorage";
 import { insertWorkout } from "@/utils/database/databaseSetters";
 import { triggerHaptic } from "@/utils/haptics";
 import { useNewWorkoutStore } from "@/utils/zustand_stores/newWorkoutStore";
 import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useCallback, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useCallback, useState, useEffect } from "react";
 import {
     KeyboardAvoidingView,
     Platform,
@@ -27,15 +29,12 @@ const NewWorkout = () => {
     const setNewTagColor = useNewWorkoutStore((state) => state.setNewTagColor);
     const notes = useNewWorkoutStore((state) => state.notes);
     const setNewNotes = useNewWorkoutStore((state) => state.setNewNotes);
-
     const exerciseOrder = useNewWorkoutStore((state) => state.exerciseOrder);
     const exercises = useNewWorkoutStore((state) => state.exercises);
-
     const resetWorkout = useNewWorkoutStore((state) => state.resetWorkout);
     const addExercise = useNewWorkoutStore((state) => state.addExercise);
 
     const triggerRefresh = useOptionsStore((s) => s.triggerRefresh);
-
     const [colorModalVisible, setColorModalVisible] = useState(false);
 
     const handleSubmit = useCallback(() => {
@@ -69,6 +68,7 @@ const NewWorkout = () => {
             insertWorkout(workoutData);
             resetWorkout();
             triggerRefresh(); // get past workouts callendar to refresh
+            AsyncStorage.removeItem('newWorkout'); // clear autosave cache
         } catch (error) {
             console.error("Failed to insert workout:", error);
             throw error;
@@ -82,6 +82,12 @@ const NewWorkout = () => {
         tagColor,
         triggerRefresh,
     ]);
+
+    // Set autosave of in-progress workout for ever 10 seconds
+    useEffect(() => {
+        const interval = setInterval(() => saveNewWorkoutToAsyncStorage(), 10000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <View

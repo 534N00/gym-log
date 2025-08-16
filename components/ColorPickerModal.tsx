@@ -1,6 +1,6 @@
-import { triggerHaptic } from "@/utils/haptics";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Modal, Pressable, View } from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { triggerHaptic } from "@/utils/haptics";
 
 const COLORS = [
     "#FF5733",

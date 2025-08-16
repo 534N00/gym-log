@@ -3,6 +3,7 @@ import "react-native-get-random-values"; // Gives crypto functionality that nano
 import { create } from "zustand";
 import { triggerHaptic } from "../haptics";
 
+
 export interface ExerciseState {
     id: string;
     name: string;
@@ -32,6 +33,8 @@ interface WorkoutState {
     setNewNotes: (notes: string) => void;
     setNewTagColor: (tagColor: string) => void;
     resetWorkout: () => void;
+    setExerciseOrder: (order: string[]) => void;
+    setExercises: (exercises: Record<string, ExerciseState>) => void;
 
     // Exercise updates
     addExercise: () => void;
@@ -71,8 +74,8 @@ const setInitialState = () => {
         exercises: {
             [initialExerciseId]: {
                 id: initialExerciseId,
-                name: "N/A",
-                variant: "M/A",
+                name: "",
+                variant: "",
                 setOrder: [initialSetId],
                 sets: {
                     [initialSetId]: {
@@ -99,6 +102,8 @@ export const useNewWorkoutStore = create<WorkoutState>((set, get) => {
         setDate: (date) => set({ date }),
         setNewNotes: (notes) => set({ notes }),
         setNewTagColor: (tagColor) => set({ tagColor }),
+        setExerciseOrder: (order) => set({ exerciseOrder: order }),
+        setExercises: (exercises) => set({ exercises }),
 
         /**
          * Return to initial state

@@ -41,7 +41,8 @@
       }
     },
     "android": {
-      "package": "test.android.lift.log"
+      "package": "test.android.lift.log",
+      "edgeToEdgeEnabled": true
     }
   }
 }

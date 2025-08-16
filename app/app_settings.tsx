@@ -1,12 +1,12 @@
-import DismissKeyboardWrapper from "@/components/DismissKeyboardWrapper";
-import GradientBlock from "@/components/GradientBlock";
+import { Animated, Pressable, Text, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { resetDatabase } from "@/utils/database/database";
 import * as exporting from "@/utils/exporting";
 import { triggerHaptic } from "@/utils/haptics";
 import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
-import { useRef, useState } from "react";
-import { Animated, Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import DismissKeyboardWrapper from "@/components/DismissKeyboardWrapper";
+import GradientBlock from "@/components/GradientBlock";
 
 const HOLD_DURATION = 5000; // 5 sec
 const BAR_CONSTANT = 11000; // <5 sec for bar to fill up

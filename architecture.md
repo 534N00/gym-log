@@ -19,7 +19,7 @@ The app uses Expo Router for screen navigation plus other Expo components for ge
 A SQLite database is used for the recording of all workouts and also the user preferences of particular exercise names and variants. SQLite was chosen for its lightweight nature and for its consitently structured data. In all querying from this database the joining of tables is avoided as the extra attributes I would get in a join are uneccesary for use in typical JS objects.
 
 ### AsyncStorage
-As user preferences are generally few in number and simple in type, AsyncStorage is the most conveneient place storage for them.
+As user preferences are generally few in number and simple in type, AsyncStorage is the most conveneient place storage for them. It also makes for a convenient place to store less-permanent data such as autosaved in-progress workouts.
 
 ### Zustand
 Zustand stores are used to centralize state that is passed in parts as props to various components. Some state stores are currently used for are the states of exercises new workout and past workouts. Using state for past workouts is currently unnecessary though as mutability is not yet implemented. A store is also used for storing all user preferences after retreiving them from the database or from AsyncStorage

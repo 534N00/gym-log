@@ -1,12 +1,3 @@
-import GradientBlock from "@/components/GradientBlock";
-import ExerciseTile from "@/components/render_workout/ExerciseTile";
-import NoteBlock from "@/components/render_workout/NoteBlock";
-import { getCompleteWorkout } from "@/utils/database/databaseGetters";
-import { deleteWorkout } from "@/utils/database/databaseSetters";
-import { usePastWorkoutStore } from "@/utils/zustand_stores/pastWorkoutStore";
-import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
     KeyboardAvoidingView,
@@ -15,11 +6,20 @@ import {
     ScrollView,
     Text,
     View,
-    Animated
+    Animated,
 } from "react-native";
-import { triggerHaptic } from "@/utils/haptics";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getCompleteWorkout } from "@/utils/database/databaseGetters";
+import { deleteWorkout } from "@/utils/database/databaseSetters";
+import { usePastWorkoutStore } from "@/utils/zustand_stores/pastWorkoutStore";
+import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import { useCalendarStore } from "@/utils/zustand_stores/calendarStore";
+import { triggerHaptic } from "@/utils/haptics";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import NoteBlock from "@/components/render_workout/NoteBlock";
+import GradientBlock from "@/components/GradientBlock";
+import ExerciseTile from "@/components/render_workout/ExerciseTile";
 
 const HOLD_DURATION = 2000; // 5 sec
 const BAR_CONSTANT = 4000; // <5 sec for bar to fill up
@@ -36,11 +36,10 @@ const OldWorkout = () => {
     const exerciseOrder = usePastWorkoutStore((s) => s.exerciseOrder);
     const triggerRefresh = useOptionsStore((s) => s.triggerRefresh);
     const deleteMarkedDate = useCalendarStore((s) => s.deleteMarkedDate);
-    
 
     const animation = useRef(new Animated.Value(0)).current;
     const holdTimeout = useRef<NodeJS.Timeout | number | null>(null);
-    
+
     const startHold = () => {
         triggerHaptic("tap");
         Animated.timing(animation, {
@@ -151,7 +150,9 @@ const OldWorkout = () => {
                                     }),
                                 }}
                             />
-                            <Text className="items-center font-bold">Delete Workout</Text>
+                            <Text className="items-center font-bold">
+                                Delete Workout
+                            </Text>
                         </Pressable>
                     </ScrollView>
                 </KeyboardAvoidingView>

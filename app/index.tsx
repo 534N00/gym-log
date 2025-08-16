@@ -1,15 +1,15 @@
-import GradientBlock from "@/components/GradientBlock";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { getMostRecentDate } from "@/utils/database/databaseGetters";
 import { triggerHaptic } from "@/utils/haptics";
 import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import GradientBlock from "@/components/GradientBlock";
 
-const TODAY = new Date(),
-    MS_PER_DAY = 86400000;
+const TODAY = new Date();
+const MS_PER_DAY = 86400000;
 
 export default function Index() {
     const router = useRouter();
@@ -65,7 +65,7 @@ export default function Index() {
                     <View // bubbles
                         className="flex-row items-center justify-between"
                     >
-                        <View className="w-[55%] h-full rounded-3xl p-4 bg-zinc-50 items-center">
+                        <View className="w-[55%] h-full rounded-3xl p-4 bg-white items-center">
                             <Text className="text-3xl font-extrabold mt-2 mb-2">
                                 {recentDate
                                     ? daysBetween(TODAY, recentDate)
@@ -80,7 +80,7 @@ export default function Index() {
                                 router.push("/new_workout");
                                 triggerHaptic("tap");
                             }}
-                            className="w-[40%] h-full rounded-3xl p-4 bg-zinc-50 items-center"
+                            className="w-[40%] h-full rounded-3xl p-4 bg-white items-center"
                         >
                             <MaterialCommunityIcons
                                 name="heart-plus"

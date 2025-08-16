@@ -1,12 +1,11 @@
+import { FlatList, Pressable, Text, TextInput, View } from "react-native";
+import { useCallback, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { triggerHaptic } from "@/utils/haptics";
+import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
 import Checkbox from "@/components/Checkbox";
 import DismissKeyboardWrapper from "@/components/DismissKeyboardWrapper";
 import GradientBlock from "@/components/GradientBlock";
-import { triggerHaptic } from "@/utils/haptics";
-import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
-import { useCallback, useState } from "react";
-import { FlatList, Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
 const AddMovements = () => {
     // States
     const exerciseOptions = useOptionsStore((state) => state.exerciseOptions);

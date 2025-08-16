@@ -1,7 +1,7 @@
+import { Keyboard, Pressable, Text, TextInput, View } from "react-native";
+import { useCallback, useState } from "react";
 import { triggerHaptic } from "@/utils/haptics";
 import { useOptionsStore } from "@/utils/zustand_stores/optionsStore";
-import { useCallback, useState } from "react";
-import { Keyboard, Pressable, Text, TextInput, View } from "react-native";
 
 interface AutocompleteSelectProps {
     optionType: string; // 'exercises' or 'variants'
@@ -9,8 +9,6 @@ interface AutocompleteSelectProps {
     placeholder?: string; // Placeholder text for the input
     size?: string; // for if used in exercise tile or in past workout search (conditional CSS basically)
 }
-
-
 
 /**
  * A reusable AutocompleteSelect component that uses the optionsStore
